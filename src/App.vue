@@ -47,7 +47,7 @@
       refresh: function () {
         this.counter += 1
         this.$http
-          .get('http://localhost:9292/grids/100')
+          .get('https://glacial-hamlet-53356.herokuapp.com/grids/100')
           .then((response) => {
             let json = response.body
             this.cells = JSON.parse(json)
@@ -61,7 +61,7 @@
       newCreate: function () {
         console.log('création intelligente d une nouvelle grille formattée')
         this.$http
-          .get('http://localhost:9292/newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
+          .get('https://glacial-hamlet-53356.herokuapp.com/newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
           .then((response) => {
             let json = response.body
             this.cells = JSON.parse(json)
