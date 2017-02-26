@@ -3,8 +3,8 @@
         <p>La vie a évolué {{ counter }} fois. </p>
         <p>Nombre de cellules en vie : {{ numberOfAliveCells }}</p>
         <p>{{ errorMessage }}</p>
-        <p>Hauteur de la nouvelle grille à créer :<input v-model="newHeight" placeholder="insert a height"></p>
-        <p>Largeur de la nouvelle grille à créer :<input v-model="newWidth" placeholder="insert a width"></p>
+        <p>Hauteur de la nouvelle grille à créer : <input v-model="newHeight" placeholder="insert a height"></p>
+        <p>Largeur de la nouvelle grille à créer : <input v-model="newWidth" placeholder="insert a width"></p>
         <button class="button-create" v-on:click="newCreate">Create intelligent and formatted grid</button>
         <button class="button-refresh" v-on:click="refresh">Refresh</button>
         <button class="button-refresh-automatic" v-on:click="refreshAutomatic">Start Refresh Automatic</button>
@@ -30,6 +30,7 @@
         counter: 0,
         idInterval: 17432,
         oldId: 17433,
+        baseUrl: 'http://localhost:9292/',
         errorMessage: ''
       }
     },
@@ -44,7 +45,7 @@
     methods: {
       checkKey: function (e) {
         if (e.key === 'c') {
-          this.create()
+          this.newCreate()
         } else if (e.key === 'Escape' || e.key === 's') {
           this.stopRefreshAutomatic()
         } else if (e.key === 'Enter' || e.key === 'a') {
@@ -56,7 +57,7 @@
       refresh: function () {
         this.counter += 1
         this.$http
-          .get('http://localhost:9292/grids/100')
+          .get(this.baseUrl + 'grids/100')
           .then((response) => {
             this.cells = response.body
             this.width = this.cells[this.cells.length - 1]['x'] * 10
@@ -67,7 +68,7 @@
             console.log(this.errorMessage)
           })
         this.$http
-          .get('http://localhost:9292/grids/100/count/alive')
+          .get(this.baseUrl + 'grids/100/count/alive')
           .then((response) => {
             this.numberOfAliveCells = response.body
           }, () => {
@@ -79,7 +80,7 @@
       newCreate: function () {
         console.log('création intelligente d une nouvelle grille formattée')
         this.$http
-          .get('http://localhost:9292/newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
+          .get(this.baseUrl + 'newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
           .then((response) => {
             this.cells = response.body
             this.width = this.cells[this.cells.length - 1]['x'] * 10
