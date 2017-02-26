@@ -1,14 +1,18 @@
 <template>
     <div id="app">
-        <p>La vie a évolué {{ counter }} fois. </p>
-        <p>Nombre de cellules en vie : {{ numberOfAliveCells }}</p>
-        <p>{{ errorMessage }}</p>
-        <p>Hauteur de la nouvelle grille à créer : <input v-model="newHeight" placeholder="insert a height"></p>
-        <p>Largeur de la nouvelle grille à créer : <input v-model="newWidth" placeholder="insert a width"></p>
-        <button class="button-create" v-on:click="newCreate">Create intelligent and formatted grid</button>
-        <button class="button-refresh" v-on:click="refresh">Refresh</button>
-        <button class="button-refresh-automatic" v-on:click="refreshAutomatic">Start Refresh Automatic</button>
-        <button class="button-stop" v-on:click="stopRefreshAutomatic">Stop refresh Automatic</button>
+        <div id="horizon">
+            <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
+            <div id="creation">
+                <p>Hauteur de la nouvelle grille à créer : <input v-model="newHeight" placeholder="insert a height"></p>
+                <p>Largeur de la nouvelle grille à créer : <input v-model="newWidth" placeholder="insert a width"></p>
+                <button class="button-create" v-on:click="newCreate">Create intelligent and formatted grid</button>
+            </div>
+            <div id="refresh">
+                <button class="button-refresh" v-on:click="refresh">Refresh</button>
+                <button class="button-refresh-automatic" v-on:click="refreshAutomatic">Start Refresh Automatic</button>
+                <button class="button-stop" v-on:click="stopRefreshAutomatic">Stop refresh Automatic</button>
+            </div>
+        </div>
         <br>
         <grid :cells="cells" :width="width" :height="height"></grid>
     </div>
@@ -16,6 +20,7 @@
 
 <script>
   import Grid from 'src/components/Grid'
+  import Info from 'src/components/Info'
 
   export default {
     name: 'app',
@@ -35,7 +40,8 @@
       }
     },
     components: {
-      Grid
+      Grid,
+      Info
     },
     created () {
       window.addEventListener('keyup', this.checkKey)
@@ -105,8 +111,16 @@
 </script>
 
 <style>
-    body{
+    body {
         background-color: black;
+    }
+
+    #horizon {
+        display: flex;
+    }
+
+    #creation, #refresh {
+        width: 33%;
     }
 
     #app {
