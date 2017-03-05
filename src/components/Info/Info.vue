@@ -1,8 +1,8 @@
 <template>
     <div id="informations">
-        <p>La vie a évolué {{ counter }} fois. </p>
-        <p>Nombre de cellules en vie : {{ numberOfAliveCells }}</p>
-        <p>{{ errorMessage }}</p>
+        <p class="turnMessage">La vie a évolué {{ counter }} fois.</p>
+        <p class="aliveMessage">Nombre de cellules en vie : {{ numberOfAliveCells }}</p>
+        <p class="errorMessage">{{ errorMessage }}</p>
     </div>
 </template>
 

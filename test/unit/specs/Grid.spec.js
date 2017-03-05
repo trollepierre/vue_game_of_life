@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Grid from "src/components/Grid";
+import Grid from "src/components/Grid/Grid";
 
 function constructGridWithProps(Grid, propsData) {
   const Ctor = Vue.extend(Grid)
@@ -17,7 +17,8 @@ describe('Grid.vue', () => {
     }
     const vm = constructGridWithProps(Grid, propsData);
 
-    expect(vm.$el.innerHTML).to.equal('<canvas width="' + expectedWidth + '" height="' + expectedHeight + '" style="border: 1px solid rgb(187, 187, 187);"></canvas>')
+    expect(vm.$el.querySelector('canvas').getAttribute('width')).to.equal(expectedWidth)
+    expect(vm.$el.querySelector('canvas').getAttribute('height')).to.equal(expectedHeight)
   })
 
   xit('should call function insertInCanvas', () => {

@@ -2,16 +2,13 @@
     <div id="app">
         <div id="horizon">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
+            <creation :newHeight="newHeight" :newWidth="newWidth"></creation>
             <div id="creation">
                 <p>Hauteur de la nouvelle grille à créer : <input v-model="newHeight" placeholder="insert a height"></p>
                 <p>Largeur de la nouvelle grille à créer : <input v-model="newWidth" placeholder="insert a width"></p>
-                <button class="button-create" v-on:click="newCreate">Create intelligent and formatted grid</button>
+                <bouton className="button-create" onClick="newCreate" text="Create grid"></bouton>
             </div>
-            <div id="refresh">
-                <button class="button-refresh" v-on:click="refresh">Refresh</button>
-                <button class="button-refresh-automatic" v-on:click="refreshAutomatic">Start Refresh Automatic</button>
-                <button class="button-stop" v-on:click="stopRefreshAutomatic">Stop refresh Automatic</button>
-            </div>
+            <commandContainer></commandContainer>
         </div>
         <br>
         <grid :cells="cells" :width="width" :height="height"></grid>
@@ -19,8 +16,11 @@
 </template>
 
 <script>
-  import Grid from 'src/components/Grid'
-  import Info from 'src/components/Info'
+  import Grid from 'src/components/Grid/Grid'
+  import Info from 'src/components/Info/Info'
+  import Bouton from 'src/components/Bouton/Bouton'
+  import Creation from 'src/components/Creation/Creation'
+  import CommandContainer from 'src/components/CommandContainer/CommandContainer'
 
   export default {
     name: 'app',
@@ -36,17 +36,20 @@
         idInterval: 17432,
         oldId: 17433,
         baseUrl: 'http://localhost:9292/',
-        errorMessage: ''
+        errorMessage: 'Pas d\'erreurs'
       }
     },
     components: {
       Grid,
-      Info
+      Info,
+      Bouton,
+      Creation,
+      CommandContainer
     },
     created () {
       window.addEventListener('keyup', this.checkKey)
       window.addEventListener('click', this.refresh)
-      this.refreshAutomatic()
+//      this.refreshAutomatic()
     },
     methods: {
       checkKey: function (e) {

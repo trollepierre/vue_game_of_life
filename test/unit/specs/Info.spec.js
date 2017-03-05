@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Info from "src/components/Info";
+import Info from "src/components/Info/Info";
 
 function constructInfoWithProps(Info, propsData) {
   const Ctor = Vue.extend(Info)
@@ -18,7 +18,9 @@ describe('Info.vue', () => {
     }
     const vm = constructInfoWithProps(Info, propsData);
 
-    expect(vm.$el.innerHTML).to.equal('<p>La vie a évolué ' + counterFromApp + ' fois. </p> <p>Nombre de cellules en vie : ' + nbOfCells + '</p> <p>' + errorMessage + '</p>')
+    expect(vm.$el.querySelector('p.turnMessage').textContent).to.equal('La vie a évolué ' + counterFromApp + ' fois.')
+    expect(vm.$el.querySelector('p.aliveMessage').textContent).to.equal('Nombre de cellules en vie : ' + nbOfCells)
+    expect(vm.$el.querySelector('p.errorMessage').textContent).to.equal(errorMessage)
   })
 
   xit('should call function insertInCanvas', () => {
