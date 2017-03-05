@@ -2,13 +2,8 @@
     <div id="app">
         <div id="horizon">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
-            <creation :newHeight="newHeight" :newWidth="newWidth"></creation>
-            <div id="creation">
-                <p>Hauteur de la nouvelle grille à créer : <input v-model="newHeight" placeholder="insert a height"></p>
-                <p>Largeur de la nouvelle grille à créer : <input v-model="newWidth" placeholder="insert a width"></p>
-                <bouton className="button-create" onClick="newCreate" text="Create grid"></bouton>
-            </div>
-            <commandContainer></commandContainer>
+            <creation :newHeight="newHeight" :newWidth="newWidth" v-on:click="newCreate"></creation>
+            <commandContainer v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic" v-on:stopRefreshAutomatic="stopRefreshAutomatic"></commandContainer>
         </div>
         <br>
         <grid :cells="cells" :width="width" :height="height"></grid>
@@ -49,7 +44,7 @@
     created () {
       window.addEventListener('keyup', this.checkKey)
       window.addEventListener('click', this.refresh)
-//      this.refreshAutomatic()
+      this.refreshAutomatic()
     },
     methods: {
       checkKey: function (e) {
@@ -71,6 +66,7 @@
             this.cells = response.body
             this.width = this.cells[this.cells.length - 1]['x'] * 10
             this.height = this.cells[this.cells.length - 1]['y'] * 10
+            this.errorMessage = 'Pas d\'erreurs'
           }, () => {
             this.stopRefreshAutomatic()
             this.errorMessage = 'le get /grids/100 est en échec'

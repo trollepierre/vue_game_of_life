@@ -1,6 +1,6 @@
 <template>
     <div id="inputContainer">
-        <p>{{  text  }}
+        <p>{{ text }}  de la nouvelle grille à créer :
             <input v-model="model" placeholder="placeholder"></p>
     </div>
 </template>

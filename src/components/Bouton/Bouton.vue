@@ -1,13 +1,18 @@
 <template>
     <div id="bouton" class="button">
-        <button :class="className" v-on:click="onClick">{{ text }}</button>
+        <button :class="className" v-on:click="click">{{ text }}</button>
     </div>
 </template>
 
 <script>
   export default {
     name: 'bouton',
-    props: ['className', 'onClick', 'text']
+    props: ['className', 'text'],
+    methods: {
+      click: function () {
+        this.$emit('click')
+      }
+    }
   }
 </script>
 
