@@ -1,8 +1,4 @@
-<template>
-    <div id="grid">
-        <canvas :width="width" :height="height" style="border:1px solid #BBB;" v-insert-in-canvas="cells"></canvas>
-    </div>
-</template>
+<template src="./Grid.html"></template>
 
 <script>
   export default {
@@ -16,12 +12,6 @@
         const cells = binding.value
 
         ctx.clearRect(0, 0, width, height)
-        ctx.fillStyle = 'black'
-        for (let x = 0; x < width / 10; x++) {
-          for (let y = 0; y < height / 10; y++) {
-            ctx.fillRect(10 * x, 10 * y, 10, 10)
-          }
-        }
         ctx.fillStyle = 'white'
         for (let i = 0; i < cells.length; i++) {
           if (cells[i]['state'] === 'alive') {
@@ -35,8 +25,4 @@
   }
 </script>
 
-<style>
-    canvas {
-        margin-top: 30px;
-    }
-</style>
+<style scoped src="./Grid.css"></style>
