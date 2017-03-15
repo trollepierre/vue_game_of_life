@@ -2,7 +2,7 @@
     <div id="app">
         <div id="horizon">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
-            <creation :newHeight="newHeight" :newWidth="newWidth" v-on:click="newCreate"></creation>
+            <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight" :newHeight="newHeight" :newWidth="newWidth" v-on:click="newCreate"></creation>
             <commandContainer v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic" v-on:stopRefreshAutomatic="stopRefreshAutomatic"></commandContainer>
         </div>
         <br>
@@ -58,6 +58,21 @@
           this.refresh()
         }
       },
+      newCreate: function () {
+        console.log('création intelligente d une nouvelle grille formattée')
+        this.$http
+          .get(this.baseUrl + 'newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
+          .then((response) => {
+            this.cells = response.body
+            this.width = this.cells[this.cells.length - 1]['x'] * 10
+            this.height = this.cells[this.cells.length - 1]['y'] * 10
+            this.counter = 0
+          }, () => {
+            this.stopRefreshAutomatic()
+            this.errorMessage = 'Le get /newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth + 'est en échec'
+            console.log(this.errorMessage)
+          })
+      },
       refresh: function () {
         this.counter += 1
         this.$http
@@ -82,21 +97,6 @@
             console.log(this.errorMessage)
           })
       },
-      newCreate: function () {
-        console.log('création intelligente d une nouvelle grille formattée')
-        this.$http
-          .get(this.baseUrl + 'newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
-          .then((response) => {
-            this.cells = response.body
-            this.width = this.cells[this.cells.length - 1]['x'] * 10
-            this.height = this.cells[this.cells.length - 1]['y'] * 10
-            this.counter = 0
-          }, () => {
-            this.stopRefreshAutomatic()
-            this.errorMessage = 'Le get /newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth + 'est en échec'
-            console.log(this.errorMessage)
-          })
-      },
       refreshAutomatic: function () {
         this.oldId = this.idInterval
         this.idInterval = setInterval(this.refresh, 500)
@@ -104,6 +104,12 @@
       stopRefreshAutomatic: function () {
         clearInterval(this.idInterval)
         clearInterval(this.oldId)
+      },
+      updateNewHeight: function (value) {
+        this.newHeight = value
+      },
+      updateNewWidth: function (value) {
+        this.newWidth = value
       }
     }
   }
