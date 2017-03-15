@@ -2,8 +2,10 @@
     <div id="app">
         <div id="horizon">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
-            <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight" :newHeight="newHeight" :newWidth="newWidth" v-on:click="newCreate"></creation>
-            <commandContainer v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic" v-on:stopRefreshAutomatic="stopRefreshAutomatic"></commandContainer>
+            <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight" :newHeight="newHeight"
+                      :newWidth="newWidth" v-on:click="newCreate"></creation>
+            <commandContainer v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic"
+                              v-on:stopRefreshAutomatic="stopRefreshAutomatic"></commandContainer>
         </div>
         <br>
         <grid :cells="cells" :width="width" :height="height"></grid>
@@ -84,16 +86,20 @@
             this.errorMessage = 'Pas d\'erreurs'
           }, () => {
             this.stopRefreshAutomatic()
-            this.errorMessage = 'le get /grids/100 est en échec'
+            this.errorMessage = 'La Base semble être KO !'
             console.log(this.errorMessage)
           })
         this.$http
           .get(this.baseUrl + 'grids/100/count/alive')
           .then((response) => {
-            this.numberOfAliveCells = response.body
+            if (response.body !== '0') {
+              this.numberOfAliveCells = response.body
+            } else {
+              console.log('0 cellules comptées')
+            }
           }, () => {
             this.stopRefreshAutomatic()
-            this.errorMessage = 'Le get /grids/100/count/alive est en échec'
+            this.errorMessage = 'La Base semble être KO !'
             console.log(this.errorMessage)
           })
       },
