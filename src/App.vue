@@ -130,10 +130,6 @@
         display: flex;
     }
 
-    #creation, #refresh {
-        width: 33%;
-    }
-
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -141,25 +137,5 @@
         text-align: center;
         color: white;
         margin-top: 30px;
-    }
-
-    .button-create {
-        background-color: blue;
-        color: white;
-    }
-
-    .button-refresh {
-        background-color: orange;
-        color: white;
-    }
-
-    .button-refresh-automatic {
-        background-color: green;
-        color: white;
-    }
-
-    .button-stop {
-        background-color: red;
-        color: white;
     }
 </style>

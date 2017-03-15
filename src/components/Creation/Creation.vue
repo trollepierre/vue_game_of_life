@@ -37,3 +37,15 @@
     }
   }
 </script>
+
+<style>
+    .button-create {
+        background-color: blue;
+        color: white;
+    }
+
+    #creation {
+        width: 33%;
+    }
+</style>
+

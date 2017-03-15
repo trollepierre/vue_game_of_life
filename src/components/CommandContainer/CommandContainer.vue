@@ -27,3 +27,24 @@
     }
   }
 </script>
+
+<style>
+    #commandContainer {
+        width: 33%;
+    }
+
+    .button-refresh {
+        background-color: orange;
+        color: white;
+    }
+
+    .button-refresh-automatic {
+        background-color: green;
+        color: white;
+    }
+
+    .button-stop {
+        background-color: red;
+        color: white;
+    }
+</style>
