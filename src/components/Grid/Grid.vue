@@ -1,4 +1,8 @@
-<template src="./Grid.html"></template>
+<template>
+    <div id="grid">
+        <canvas :width="width" :height="height" style="border:1px solid #BBB;" v-insert-in-canvas="cells"></canvas>
+    </div>
+</template>
 
 <script>
   export default {
@@ -25,4 +29,8 @@
   }
 </script>
 
-<style scoped src="./Grid.css"></style>
+<style>
+    canvas {
+        margin-top: 30px;
+    }
+</style>
