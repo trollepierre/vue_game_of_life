@@ -4,8 +4,8 @@
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
             <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight" :newHeight="newHeight"
                       :newWidth="newWidth" v-on:click="newCreate"></creation>
-            <commandContainer v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic"
-                              v-on:stopRefreshAutomatic="stopRefreshAutomatic"></commandContainer>
+            <command-container v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic"
+                              v-on:stopRefreshAutomatic="stopRefreshAutomatic"></command-container>
         </div>
         <br>
         <grid :cells="cells" :width="width" :height="height"></grid>

@@ -1,29 +1,43 @@
-import Vue from "vue";
-import Info from "src/components/Info/Info";
+import Vue from 'vue';
+import Info from 'src/components/Info/Info';
 
 function constructInfoWithProps(Info, propsData) {
   const Ctor = Vue.extend(Info)
-  return new Ctor({propsData}).$mount();
+  return new Ctor({ propsData }).$mount();
 }
 
 describe('Info.vue', () => {
-  it('should render expected informations bloc', () => {
-    const counterFromApp = '150'
-    const nbOfCells = '234'
-    const errorMessage = 'Le get est en erreur'
+
+  let vm, counter, nbOfCells, errorMessage;
+
+  beforeEach(function () {
+    counter = '150'
+    nbOfCells = '234'
+    errorMessage = 'Le get est en erreur'
+
     const propsData = {
-      counter: counterFromApp,
+      counter: counter,
       numberOfAliveCells: nbOfCells,
       errorMessage: errorMessage
     }
-    const vm = constructInfoWithProps(Info, propsData);
 
-    expect(vm.$el.querySelector('p.turnMessage').textContent).to.equal('La vie a évolué ' + counterFromApp + ' fois.')
-    expect(vm.$el.querySelector('p.aliveMessage').textContent).to.equal('Nombre de cellules en vie : ' + nbOfCells)
-    expect(vm.$el.querySelector('p.errorMessage').textContent).to.equal(errorMessage)
+    vm = constructInfoWithProps(Info, propsData);
+  });
+
+  it('checks sanity', () => {
+    expect(vm.$el.id).to.equal('informations');
   })
 
-  xit('should call function insertInCanvas', () => {
+  it('should inject counter prop inside paragraph', () => {
+    expect(vm.$el.querySelector('p.turnMessage').textContent).to.equal('La vie a évolué ' + counter + ' fois.')
+  })
+
+  it('should inject numberOfAliveCells prop inside paragraph', () => {
+    expect(vm.$el.querySelector('p.aliveMessage').textContent).to.equal('Nombre de cellules en vie : ' + nbOfCells)
+  })
+
+  it('should inject errorMessage prop', () => {
+    expect(vm.$el.querySelector('p.errorMessage').textContent).to.equal(errorMessage)
   })
 
 })

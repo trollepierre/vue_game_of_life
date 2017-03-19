@@ -1,9 +1,22 @@
 <template>
     <div id="creation">
-        <inputContainer text="Hauteur" v-on:input="height" value="updateNewWidth"
-                        placehoder="insert a height"></inputContainer>
-        <inputContainer text="Largeur" v-on:input="width" value="updateNewWidth" placehoder="insert a width"></inputContainer>
-        <bouton className="button-create" v-on:click="click" text="Create grid"></bouton>
+        <input-container
+                text="Hauteur"
+                v-on:input="height"
+                value="updateNewWidth"
+                placehoder="insert a height">
+        </input-container>
+        <input-container
+                text="Largeur"
+                v-on:input="width"
+                value="updateNewWidth"
+                placehoder="insert a width">
+        </input-container>
+        <bouton
+                className="button-create"
+                v-on:click="click"
+                text="Create grid">
+        </bouton>
     </div>
 </template>
 

@@ -7,21 +7,45 @@ function constructGridWithProps(Grid, propsData) {
 }
 
 describe('Grid.vue', () => {
-  it('should render canvas with expected width and height', () => {
-    const expectedHeight = '150'
-    const expectedWidth = '234'
+
+  let vm, expectedHeight, expectedWidth, canvas, cells;
+
+  beforeEach(function() {
+    expectedHeight = '150'
+    expectedWidth = '234'
+    cells = {};
     const propsData = {
       height: expectedHeight,
       width: expectedWidth,
-      cells: {}
+      cells: cells
     }
-    const vm = constructGridWithProps(Grid, propsData);
+    vm = constructGridWithProps(Grid, propsData);
+    canvas = vm.$el.querySelector('canvas');
+  });
 
-    expect(vm.$el.querySelector('canvas').getAttribute('width')).to.equal(expectedWidth)
-    expect(vm.$el.querySelector('canvas').getAttribute('height')).to.equal(expectedHeight)
+  it('checks sanity', () => {
+    expect(vm.$el.id).to.equal('grid');
+  })
+
+  it('should contain canvas with props width ', () => {
+    expect(canvas.getAttribute('width')).to.equal(expectedWidth)
+  })
+
+  it('should contain canvas with props height', () => {
+    expect(canvas.getAttribute('height')).to.equal(expectedHeight)
+  })
+
+  xit('should bind function insertInCanvas', () => {
+    sinon.spy(vm, 'insertInCanvas');
+    vm = constructGridWithProps(Grid, {});
+    sinon.assert.calledOnce(vm.insertInCanvas);
   })
 
   xit('should call function insertInCanvas', () => {
+    // when
+    vm.insertInCanvas(canvas, {cells: cells, color: 'white'})
+    // then
+
   })
 
 })

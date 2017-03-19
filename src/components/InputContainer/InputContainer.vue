@@ -1,5 +1,5 @@
 <template>
-    <div id="inputContainer">
+    <div class="inputContainer">
         <p>{{ text }} de la nouvelle grille à créer :
             <input ref="input"
                    v-bind:value="model"

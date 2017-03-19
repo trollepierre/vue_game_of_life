@@ -1,29 +1,58 @@
-import Vue from "vue";
-import Bouton from "src/components/Bouton/Bouton";
+import Vue from 'vue';
+import Bouton from 'src/components/Bouton/Bouton';
 
 function constructBoutonWithProps(Bouton, propsData) {
-  const Ctor = Vue.extend(Bouton)
-  return new Ctor({propsData}).$mount();
+  const Constructor = Vue.extend(Bouton)
+  return new Constructor({ propsData }).$mount();
 }
 
 describe('Bouton.vue', () => {
-  it('should render expected button bloc', () => {
-    const className = 'button-create'
-    const onClick = 'newCreate'
-    const text = 'Create intelligent and formatted grid'
+
+  let vm, className, onClick, text;
+
+  beforeEach(function () {
+    className = 'button-create'
+    onClick = 'newCreate'
+    text = 'Create intelligent and formatted grid'
     const propsData = {
       className: className,
-      onClick: onClick,
       text: text
     }
-    const vm = constructBoutonWithProps(Bouton, propsData);
+    vm = constructBoutonWithProps(Bouton, propsData);
+  });
 
-    expect(vm.$el.querySelector('button').getAttribute("class")).to.equal(className)
-    // expect(vm.$el.querySelector('button').getAttribute("v-on:click")).to.equal(onClick)
+  it('checks sanity', () => {
+    expect(vm.$el.className).to.equal('button');
+  })
+
+  it('should add prop class to button', () => {
+    expect(vm.$el.querySelector('button').className).to.equal(className)
+  })
+
+  it('should add prop text to button', () => {
     expect(vm.$el.querySelector('button').innerHTML).to.equal(text)
   })
 
-  xit('should render onClick', () => {
+  it('should render onClick', () => {
+    // given
+    sinon.spy(vm, '$emit')
+    // sinon.spy(vm, 'buttonClick')
+    let button = vm.$el.querySelector('button');
 
+    // when
+    button.click();
+
+    // then
+    sinon.assert.calledOnce(vm.$emit)
+    // sinon.assert.calledOnce(vm.buttonClick)
   })
-})
+
+  describe('on method click', function () {
+    it('should emit click ', () => {
+      sinon.spy(vm, '$emit')
+      vm.buttonClick()
+      sinon.assert.calledWith(vm.$emit, 'click')
+    })
+  })
+
+});

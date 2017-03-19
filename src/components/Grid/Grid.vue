@@ -1,6 +1,7 @@
 <template>
     <div id="grid">
-        <canvas :width="width" :height="height" style="border:1px solid #BBB;" v-insert-in-canvas="cells"></canvas>
+        <canvas :width="width" :height="height" style="border:1px solid #BBB;"
+                v-insert-in-canvas="{ cells: cells, color: 'white' }"></canvas>
     </div>
 </template>
 
@@ -11,12 +12,12 @@
     directives: {
       insertInCanvas: function (canvasElement, binding) {
         const ctx = canvasElement.getContext('2d')
-        const width = canvasElement.width
-        const height = canvasElement.height
-        const cells = binding.value
+        const cells = binding.value.cells
 
-        ctx.clearRect(0, 0, width, height)
-        ctx.fillStyle = 'white'
+        ctx.clearRect(0, 0, canvasElement.width, canvasElement.height)
+
+        // remplissage de la grille de cellules blanches
+        ctx.fillStyle = binding.value.color
         for (let i = 0; i < cells.length; i++) {
           if (cells[i]['state'] === 'alive') {
             let x = cells[i]['x']

@@ -1,6 +1,6 @@
 <template>
-    <div id="bouton" class="button">
-        <button :class="className" v-on:click="click">{{ text }}</button>
+    <div class="button">
+        <button :class="className" v-on:click="buttonClick">{{ text }}</button>
     </div>
 </template>
 
@@ -9,7 +9,7 @@
     name: 'bouton',
     props: ['className', 'text'],
     methods: {
-      click: function () {
+      buttonClick: function () {
         this.$emit('click')
       }
     }
