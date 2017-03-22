@@ -45,7 +45,6 @@
     },
     created () {
       window.addEventListener('keyup', this.checkKey)
-      window.addEventListener('click', this.refresh)
       this.refreshAutomatic()
     },
     methods: {
