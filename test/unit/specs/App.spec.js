@@ -1,19 +1,19 @@
-import Vue from "vue";
-import App from "src/App";
+import Vue from 'vue'
+import App from 'src/App'
 
-function constructAppWithProps(App) {
+function constructAppWithProps (App) {
   const Ctor = Vue.extend(App)
-  return new Ctor().$mount();
+  return new Ctor().$mount()
 }
 
 describe('App.vue', () => {
-  let vm;
-  beforeEach(function() {
-    vm = constructAppWithProps(App);
+  let vm
+  beforeEach(function () {
+    vm = constructAppWithProps(App)
   })
 
   it('checks sanity', () => {
-    expect(vm.$el.id).to.equal('app');
+    expect(vm.$el.id).to.equal('app')
   })
 
   it('should render a correct page', () => {

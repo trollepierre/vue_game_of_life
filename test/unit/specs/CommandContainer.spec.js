@@ -1,22 +1,21 @@
-import Vue from 'vue';
-import CommandContainer from 'src/components/CommandContainer/CommandContainer';
+import Vue from 'vue'
+import CommandContainer from 'src/components/CommandContainer/CommandContainer'
 
-function constructCommandContainerWithProps(CommandContainer) {
+function constructCommandContainerWithProps (CommandContainer) {
   const Constructor = Vue.extend(CommandContainer)
-  return new Constructor().$mount();
+  return new Constructor().$mount()
 }
 
 describe('CommandContainer.vue', () => {
-
-  let vm, threeButtons;
+  let vm, threeButtons
 
   beforeEach(function () {
-    vm = constructCommandContainerWithProps(CommandContainer);
-    threeButtons = vm.$el.querySelectorAll('div.button button');
-  });
+    vm = constructCommandContainerWithProps(CommandContainer)
+    threeButtons = vm.$el.querySelectorAll('div.button button')
+  })
 
   it('checks sanity', () => {
-    expect(vm.$el.id).to.equal('commandContainer');
+    expect(vm.$el.id).to.equal('commandContainer')
   })
 
   it('should render refresh Bouton', () => {
@@ -33,13 +32,13 @@ describe('CommandContainer.vue', () => {
 
   xit('should render refresh, refreshAuto and stopRefreshAuto', () => {
     // given
-    let $button = vm.$el.querySelector('button');
-    sinon.spy($button, '$emit');
+    let $button = vm.$el.querySelector('button')
+    sinon.spy($button, '$emit')
 
     // when
-    $button.click();
+    $button.click()
 
     // then
-    sinon.assert.calledOnce($button.$emit);
+    sinon.assert.calledOnce($button.$emit)
   })
 })

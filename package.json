@@ -8,7 +8,7 @@
     "build": "node build/build.js",
     "dev": "node build/dev-server.js",
     "e2e": "node test/e2e/runner.js",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs --fix",
     "lintunit": "npm run lint & npm run unit",
     "start": "npm run dev",
     "test": "npm run unit && npm run e2e",

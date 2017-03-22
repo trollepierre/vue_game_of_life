@@ -1,28 +1,26 @@
-import Vue from 'vue';
-import Bouton from 'src/components/Bouton/Bouton';
+import Vue from 'vue'
+import Bouton from 'src/components/Bouton/Bouton'
 
-function constructBoutonWithProps(Bouton, propsData) {
+function constructBoutonWithProps (Bouton, propsData) {
   const Constructor = Vue.extend(Bouton)
-  return new Constructor({ propsData }).$mount();
+  return new Constructor({ propsData }).$mount()
 }
 
 describe('Bouton.vue', () => {
-
-  let vm, className, onClick, text;
+  let vm, className, text
 
   beforeEach(function () {
     className = 'button-create'
-    onClick = 'newCreate'
     text = 'Create intelligent and formatted grid'
     const propsData = {
       className: className,
       text: text
     }
-    vm = constructBoutonWithProps(Bouton, propsData);
-  });
+    vm = constructBoutonWithProps(Bouton, propsData)
+  })
 
   it('checks sanity', () => {
-    expect(vm.$el.className).to.equal('button');
+    expect(vm.$el.className).to.equal('button')
   })
 
   it('should add prop class to button', () => {
@@ -37,10 +35,10 @@ describe('Bouton.vue', () => {
     // given
     sinon.spy(vm, '$emit')
     // sinon.spy(vm, 'buttonClick')
-    let button = vm.$el.querySelector('button');
+    let button = vm.$el.querySelector('button')
 
     // when
-    button.click();
+    button.click()
 
     // then
     sinon.assert.calledOnce(vm.$emit)
@@ -54,5 +52,4 @@ describe('Bouton.vue', () => {
       sinon.assert.calledWith(vm.$emit, 'click')
     })
   })
-
-});
+})
