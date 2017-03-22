@@ -5,12 +5,15 @@
   "author": "Pierre Trollé <ptrolle@octo.com>",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "dev": "node build/dev-server.js",
     "e2e": "node test/e2e/runner.js",
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "lintunit": "npm run lint & npm run unit",
+    "start": "npm run dev",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "watch": "npm run unit -- --watch"
   },
   "dependencies": {
     "vue": "^2.1.0",
@@ -54,7 +57,7 @@
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "^1.7.0",
     "lolex": "^1.4.0",
-    "mocha": "^3.1.0",
+    "mocha": "^3.1.2",
     "chai": "^3.5.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
