@@ -28,7 +28,7 @@
         newWidth: 100,
         newHeight: 50,
         cells: 'cells',
-        numberOfAliveCells: 'Non connue',
+        numberOfAliveCells: 'Non connu',
         counter: 0,
         idInterval: 'Refresh Auto Not Started',
         baseUrl: 'http://localhost:9292/',
