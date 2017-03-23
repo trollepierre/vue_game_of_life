@@ -7,21 +7,33 @@ function constructAppWithProps (App) {
 }
 
 describe('App.vue', () => {
-  let vm
+  let vm, bandeau
   beforeEach(function () {
     vm = constructAppWithProps(App)
+    bandeau = vm.$el.querySelector('#bandeau')
   })
 
   it('checks sanity', () => {
     expect(vm.$el.id).to.equal('app')
   })
 
-  it('should render a correct page', () => {
-    expect(vm.$el.querySelector('#informations p').textContent).to.equal('La vie a évolué 0 fois.')
-    // expect(vm.$el.innerHTML).to.equal('<div id="informations"><p>La vie a évolué 0 fois. </p> <p>Nombre de cellules en vie : Non connue</p> <p></p></div> <div id="creation"><p>Hauteur de la nouvelle grille à créer : <input placeholder="insert a height"></p> <p>Largeur de la nouvelle grille à créer : <input placeholder="insert a width"></p> <button class="button-create">Create intelligent and formatted grid</button></div> <div id="refresh"><button class="button-refresh">Refresh</button> <button class="button-refresh-automatic">Start Refresh Automatic</button> <button class="button-stop">Stop refresh Automatic</button></div> <br> <div id="grid"><canvas width="1000" height="500" style="border: 1px solid rgb(187, 187, 187);"></canvas></div>')
-    // expect(vm.$el.innerHTML).to.equal('<div id="informations"><p>La vie a évolué 0 fois. </p> <p>Nombre de cellules en vie : Non connue</p> <p></p></div> <div id="creation"><p>Hauteur de la nouvelle grille à créer : <input placeholder="insert a height"></p> <p>Largeur de la nouvelle grille à créer : <input placeholder="insert a width"></p> <button class="button-create">Create intelligent and formatted grid</button></div> <div id="refresh"><button class="button-refresh">Refresh</button> <button class="button-refresh-automatic">Start Refresh Automatic</button> <button class="button-stop">Stop refresh Automatic</button></div> <br> <div id="grid"><canvas width="1000" height="500" style="border: 1px solid rgb(187, 187, 187);"></canvas></div>')
+  it('should contain a bandeau', () => {
+    expect(bandeau).not.to.be.empty
   })
 
-  xit('should count correctly', () => {
+  it('should contain a info inside bandeau', () => {
+    expect(bandeau.querySelector('#informations')).not.to.be.empty
+  })
+
+  it('should contain a creation inside bandeau', () => {
+    expect(bandeau.querySelector('#creation')).not.to.be.empty
+  })
+
+  it('should contain a comandContainer inside bandeau', () => {
+    expect(bandeau.querySelector('#commandContainer')).not.to.be.empty
+  })
+
+  it('should contain a grid', () => {
+    expect(vm.$el.querySelector('#grid')).not.to.be.empty
   })
 })

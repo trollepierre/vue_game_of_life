@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <div id="horizon">
+        <div id="bandeau">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
             <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight" :newHeight="newHeight"
                       :newWidth="newWidth" v-on:click="newCreate"></creation>
@@ -125,7 +125,7 @@
         background-color: black;
     }
 
-    #horizon {
+    #bandeau {
         display: flex;
     }
 
