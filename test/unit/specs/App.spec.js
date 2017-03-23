@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import App from 'src/App'
 
-function constructAppWithProps (App) {
-  const Ctor = Vue.extend(App)
-  return new Ctor().$mount()
+function constructAppWithProps (App, data) {
+  data = data || {}
+  const Constructor = Vue.extend(App)
+  return new Constructor(data).$mount()
 }
 
 describe('App.vue', () => {
@@ -17,20 +18,53 @@ describe('App.vue', () => {
     expect(vm.$el.id).to.equal('app')
   })
 
-  it('should contain a bandeau', () => {
-    expect(bandeau).not.to.be.empty
-  })
+  describe('bandeau', function () {
+    it('should contain a bandeau', () => {
+      expect(bandeau).not.to.be.empty
+    })
+    describe('info', function () {
+      it('should contain a info inside bandeau', () => {
+        expect(bandeau.querySelector('#informations')).not.to.be.empty
+      })
 
-  it('should contain a info inside bandeau', () => {
-    expect(bandeau.querySelector('#informations')).not.to.be.empty
-  })
+      it('should pass errorMessage to vue', () => {
+        let data = {
+          data: {
+            errorMessage: 'plop'
+          }
+        }
+        vm = constructAppWithProps(App, data)
+        expect(vm.$el.innerText).to.contain('plop')
+      })
 
-  it('should contain a creation inside bandeau', () => {
-    expect(bandeau.querySelector('#creation')).not.to.be.empty
-  })
+      it('should pass numberOfAliveCells to vue', () => {
+        let data = {
+          data: {
+            numberOfAliveCells: 'numberOfAliveCells'
+          }
+        }
+        vm = constructAppWithProps(App, data)
+        expect(vm.$el.innerText).to.contain('numberOfAliveCells')
+      })
 
-  it('should contain a comandContainer inside bandeau', () => {
-    expect(bandeau.querySelector('#commandContainer')).not.to.be.empty
+      it('should pass counter to vue', () => {
+        let data = {
+          data: {
+            counter: 'counter'
+          }
+        }
+        vm = constructAppWithProps(App, data)
+        expect(vm.$el.innerText).to.contain('counter')
+      })
+    })
+
+    it('should contain a creation inside bandeau', () => {
+      expect(bandeau.querySelector('#creation')).not.to.be.empty
+    })
+
+    it('should contain a comandContainer inside bandeau', () => {
+      expect(bandeau.querySelector('#commandContainer')).not.to.be.empty
+    })
   })
 
   it('should contain a grid', () => {

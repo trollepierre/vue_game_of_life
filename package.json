@@ -14,7 +14,7 @@
     "test": "npm run unit && npm run e2e",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "watch": "npm run unit -- --watch",
-    "off": "npm run unit --offline"
+    "off": "yarn unit --offline"
   },
   "dependencies": {
     "vue": "^2.1.0",
