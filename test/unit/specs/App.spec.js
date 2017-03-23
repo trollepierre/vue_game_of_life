@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import App from 'src/App';
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import App from 'src/App'
 
-Vue.use(VueResource);
+Vue.use(VueResource)
 
-function constructAppWithProps(App, data) {
+function constructAppWithProps (App, data) {
   data = data || {}
   const Constructor = Vue.extend(App)
   return new Constructor(data).$mount()
@@ -155,18 +155,18 @@ describe('App.vue', () => {
   describe('refresh', function () {
     xit('should increase counter', function () {
       // given
-      const promiseCall = sinon.stub(Vue, 'http').returnsPromise();
+      const promiseCall = sinon.stub(Vue, 'http').returnsPromise()
       promiseCall.resolves({
         body: {
-          cells: [{x: "1", y: "1", state: "alive"}],
+          cells: [{x: '1', y: '1', state: 'alive'}]
         }
-      });
+      })
       vm = constructAppWithProps(App)
 
       // when
       vm.refresh()
       // then
-      expect(promiseCall).to.have.been.called;
+      expect(promiseCall).to.have.been.called
       // expect(promiseCall).to.have.been.calledWith({
       //   method: 'get',
       //   url: 'http://pokeapi.co/api/v2/pokemon/'
@@ -174,13 +174,27 @@ describe('App.vue', () => {
       expect(vm.$data.counter).to.equal(1)
 
       // after
-      Vue.http.restore();
+      Vue.http.restore()
     })
   })
 
-
   describe('refreshAutomatic', function () {
-    xit('should use setInterval and call refresh', function () {
+    xit('should setInterval and call refresh', function () {})
+
+    it('should NOT setInterval and call refresh when AutoRefresh already started', function () {
+      // given
+      let data = {
+        data: {
+          idInterval: 'id has changed'
+        }
+      }
+      vm = constructAppWithProps(App, data)
+
+      // when
+      vm.refreshAutomatic()
+
+      // then
+      expect(vm.$data.idInterval).to.equal('id has changed')
     })
   })
 
