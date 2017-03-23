@@ -26,7 +26,6 @@
 
   export default {
     name: 'creation',
-    props: ['newHeight', 'newWidth'],
     data () {
       return {
         updatedNewHeight: '',

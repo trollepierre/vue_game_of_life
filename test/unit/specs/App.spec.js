@@ -22,6 +22,7 @@ describe('App.vue', () => {
     it('should contain a bandeau', () => {
       expect(bandeau).not.to.be.empty
     })
+
     describe('info', function () {
       it('should contain a info inside bandeau', () => {
         expect(bandeau.querySelector('#informations')).not.to.be.empty
@@ -58,8 +59,10 @@ describe('App.vue', () => {
       })
     })
 
-    it('should contain a creation inside bandeau', () => {
-      expect(bandeau.querySelector('#creation')).not.to.be.empty
+    describe('creation', function () {
+      it('should contain a creation inside bandeau', () => {
+        expect(bandeau.querySelector('#creation')).not.to.be.empty
+      })
     })
 
     it('should contain a comandContainer inside bandeau', () => {

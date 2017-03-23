@@ -2,8 +2,8 @@
     <div id="app">
         <div id="bandeau">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
-            <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight" :newHeight="newHeight"
-                      :newWidth="newWidth" v-on:click="newCreate"></creation>
+            <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight"
+                      v-on:click="newCreate"></creation>
             <command-container v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic"
                               v-on:stopRefreshAutomatic="stopRefreshAutomatic"></command-container>
         </div>
@@ -45,7 +45,6 @@
     },
     created () {
       window.addEventListener('keyup', this.checkKey)
-      this.refreshAutomatic()
     },
     methods: {
       checkKey: function (e) {
