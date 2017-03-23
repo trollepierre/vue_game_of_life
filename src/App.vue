@@ -5,7 +5,7 @@
             <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight"
                       v-on:click="newCreate"></creation>
             <command-container v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic"
-                              v-on:stopRefreshAutomatic="stopRefreshAutomatic"></command-container>
+                               v-on:stopRefreshAutomatic="stopRefreshAutomatic"></command-container>
         </div>
         <br>
         <grid :cells="cells" :width="width" :height="height"></grid>
@@ -30,8 +30,7 @@
         cells: 'cells',
         numberOfAliveCells: 'Non connue',
         counter: 0,
-        idInterval: 17432,
-        oldId: 17433,
+        idInterval: 'Refresh Auto Not Started',
         baseUrl: 'http://localhost:9292/',
         errorMessage: 'Pas d\'erreurs'
       }
@@ -67,6 +66,7 @@
             this.width = this.cells[this.cells.length - 1]['x'] * 10
             this.height = this.cells[this.cells.length - 1]['y'] * 10
             this.counter = 0
+            this.refreshAutomatic()
           }, () => {
             this.stopRefreshAutomatic()
             this.errorMessage = 'Le get /newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth + 'est en échec'
@@ -102,12 +102,12 @@
           })
       },
       refreshAutomatic: function () {
-        this.oldId = this.idInterval
-        this.idInterval = setInterval(this.refresh, 500)
+        if (this.idInterval === 'Refresh Auto Not Started') {
+          this.idInterval = setInterval(this.refresh, 500)
+        }
       },
       stopRefreshAutomatic: function () {
         clearInterval(this.idInterval)
-        clearInterval(this.oldId)
       },
       updateNewHeight: function (value) {
         this.newHeight = value
