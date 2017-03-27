@@ -28,17 +28,18 @@ describe('InputContainer.vue', () => {
     expect(vm.$el.querySelector('input').getAttribute('placeholder')).to.equal('placeholder')
   })
 
-  xit('should bind updateValue with value model on input', () => {
+  it('should bind updateValue with value model on input', () => {
+    // given
     let inputElement = vm.$el.querySelector('input')
-    expect(inputElement.getAttribute('placeholder')).to.equal('placeholder')
+    sinon.spy(vm, '$emit')
+    let event = document.createEvent('Event');
 
-    let bool = false
-    inputElement.addEventListener('input', () => { bool = true })
+    // when
+    event.initEvent('input', true, true); //can bubble, and is cancellable
+    inputElement.dispatchEvent(event);
 
-    inputElement.change('e')
-    expect(bool).to.equal(true)
-
-    expect(vm.$emit('input'))
+    // then
+    sinon.assert.calledOnce(vm.$emit)
   })
 
   describe('method updateValue', function () {
@@ -53,6 +54,24 @@ describe('InputContainer.vue', () => {
       sinon.spy(vm, '$emit')
       vm.updateValue('42')
       sinon.assert.calledWith(vm.$emit, 'input', 42)
+    })
+
+    it('should format value before emitting ', () => {
+      sinon.spy(vm, '$emit')
+      vm.updateValue('42 \n ')
+      sinon.assert.calledWith(vm.$emit, 'input', 42)
+    })
+
+    xit('should update value in model when formatted value is different ', () => {
+      let inputElement = vm.$el.querySelector('input')
+      vm.updateValue('42 \n ')
+      expect(inputElement.$ref.input.value).to.equal('42')
+    })
+
+    xit('should format value before emitting ', () => {
+      sinon.spy(vm, '$emit')
+      vm.updateValue('42 \n 4')
+      sinon.assert.neverCalled(vm.$emit)
     })
   })
 })
