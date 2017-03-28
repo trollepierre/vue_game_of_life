@@ -153,16 +153,21 @@ describe('App.vue', () => {
   })
 
   describe('refresh', function () {
-    let promiseCall
+    let promiseCall,myCells
 
     beforeEach(function() {
+      // given
       promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+      myCells = {x: '1', y: '1', state: 'alive'};
       promiseCall.resolves({
         body: {
-          cells: [{x: '1', y: '1', state: 'alive'}]
+          cells: [myCells]
         }
       })
       vm = constructAppWithProps(App)
+
+      // when
+      vm.refresh()
     });
 
     afterEach(function () {
@@ -170,24 +175,28 @@ describe('App.vue', () => {
     });
 
     it('should increase counter', function () {
-      // when
-      vm.refresh()
-
-      // then
       expect(vm.$data.counter).to.equal(1)
     })
 
-    it('should call promise', function () {
-      // when
-      vm.refresh()
-
-      // then
-      expect(promiseCall).to.have.been.called
-      // expect(promiseCall).to.have.been.calledWith({
-      //   method: 'get',
-      //   url: 'http://pokeapi.co/api/v2/pokemon/'
-      // });
+    it('should call promise with correct url', function () {
+      expect(promiseCall).to.have.been.calledWith({
+        method: 'get',
+        url: 'http://localhost:9292/grids/100'
+      });
     })
+
+    xit('should update cells', function () {
+      expect(vm.$data.cells).to.equal(myCells)
+    })
+
+    xit('should update width', function () {
+      expect(vm.$data.width).to.equal(10)
+    })
+
+    xit('should increase counter', function () {
+      expect(vm.$data.errorMessage).to.equal('Pas d\'erreurs')
+    })
+
   })
 
   describe('refreshAutomatic', function () {
