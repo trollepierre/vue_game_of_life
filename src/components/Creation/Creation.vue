@@ -3,14 +3,14 @@
         <input-container
                 text="Hauteur"
                 v-on:input="height"
-                value="updateNewWidth"
-                placehoder="insert a height">
+                value="updatedNewHeight"
+                placeholder="insert a height">
         </input-container>
         <input-container
                 text="Largeur"
                 v-on:input="width"
-                value="updateNewWidth"
-                placehoder="insert a width">
+                value="updatedNewWidth"
+                placeholder="insert a width">
         </input-container>
         <bouton
                 className="button-create"
@@ -34,13 +34,17 @@
     },
     methods: {
       click: function () {
-        this.$emit('click')
+        let dimension = {
+          height: this.updatedNewHeight,
+          width: this.updatedNewWidth
+        }
+        this.$emit('click', dimension)
       },
       width: function (value) {
-        this.$emit('updateNewWidth', value)
+        this.updatedNewWidth = value
       },
       height: function (value) {
-        this.$emit('updateNewHeight', value)
+        this.updatedNewHeight = value
       }
     },
     components: {

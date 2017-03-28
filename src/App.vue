@@ -2,8 +2,7 @@
     <div id="app">
         <div id="bandeau">
             <info :counter="counter" :numberOfAliveCells="numberOfAliveCells" :errorMessage="errorMessage"></info>
-            <creation v-on:updateNewWidth="updateNewWidth" v-on:updateNewHeight="updateNewHeight"
-                      v-on:click="newCreate"></creation>
+            <creation v-on:click="newCreate"></creation>
             <command-container v-on:refresh="refresh" v-on:refreshAutomatic="refreshAutomatic"
                                v-on:stopRefreshAutomatic="stopRefreshAutomatic"></command-container>
         </div>
@@ -57,10 +56,12 @@
           this.refresh()
         }
       },
-      newCreate: function () {
-        console.log('création intelligente d une nouvelle grille formattée')
+      newCreate: function (dimension) {
+        console.log('création intelligente d une nouvelle grille formattée', dimension)
+        console.log(dimension.width)
+        console.log(dimension.height)
         this.$http
-          .get(this.baseUrl + 'newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth)
+          .get(this.baseUrl + 'newCreate/100/height/' + dimension.height + '/width/' + dimension.width)
           .then((response) => {
             this.cells = response.body
             this.width = this.cells[this.cells.length - 1]['x'] * 10
@@ -69,7 +70,7 @@
             this.refreshAutomatic()
           }, () => {
             this.stopRefreshAutomatic()
-            this.errorMessage = 'Le get /newCreate/100/height/' + this.newHeight + '/width/' + this.newWidth + 'est en échec'
+            this.errorMessage = 'Le get newCreate/100/height/' + dimension.height + '/width/' + dimension.width + ' est en échec'
             console.log(this.errorMessage)
           })
       },

@@ -28,21 +28,20 @@ describe('InputContainer.vue', () => {
     expect(vm.$el.querySelector('input').getAttribute('placeholder')).to.equal('placeholder')
   })
 
-  it('should bind updateValue with value model on input', () => {
-    // given
-    let inputElement = vm.$el.querySelector('input')
-    sinon.spy(vm, '$emit')
-    let event = document.createEvent('Event');
-
-    // when
-    event.initEvent('input', true, true); //can bubble, and is cancellable
-    inputElement.dispatchEvent(event);
-
-    // then
-    sinon.assert.calledOnce(vm.$emit)
-  })
-
   describe('method updateValue', function () {
+    it('should bind updateValue with value model on input', () => {
+      // given
+      let inputElement = vm.$el.querySelector('input')
+      sinon.spy(vm, '$emit')
+
+      // when
+      let event = new Event('input')
+      inputElement.dispatchEvent(event)
+
+      // then
+      sinon.assert.calledOnce(vm.$emit)
+    })
+
     it('should emit', function () {
       sinon.spy(vm, '$emit')
 

@@ -73,7 +73,7 @@ describe('App.vue', () => {
     })
 
     describe('command container', function () {
-      it('should contain a comandContainer inside bandeau', () => {
+      it('should contain a commandContainer inside bandeau', () => {
         expect(bandeau.querySelector('#commandContainer')).not.to.be.empty
       })
 
@@ -153,28 +153,40 @@ describe('App.vue', () => {
   })
 
   describe('refresh', function () {
-    xit('should increase counter', function () {
-      // given
-      const promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+    let promiseCall
+
+    beforeEach(function() {
+      promiseCall = sinon.stub(Vue, 'http').returnsPromise()
       promiseCall.resolves({
         body: {
           cells: [{x: '1', y: '1', state: 'alive'}]
         }
       })
       vm = constructAppWithProps(App)
+    });
 
+    afterEach(function () {
+      Vue.http.restore()
+    });
+
+    it('should increase counter', function () {
       // when
       vm.refresh()
+
+      // then
+      expect(vm.$data.counter).to.equal(1)
+    })
+
+    it('should call promise', function () {
+      // when
+      vm.refresh()
+
       // then
       expect(promiseCall).to.have.been.called
       // expect(promiseCall).to.have.been.calledWith({
       //   method: 'get',
       //   url: 'http://pokeapi.co/api/v2/pokemon/'
       // });
-      expect(vm.$data.counter).to.equal(1)
-
-      // after
-      Vue.http.restore()
     })
   })
 

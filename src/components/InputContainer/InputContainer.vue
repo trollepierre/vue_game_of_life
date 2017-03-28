@@ -4,7 +4,7 @@
             <input ref="input"
                    v-bind:value="model"
                    v-on:input="updateValue($event.target.value)"
-                   placeholder="placeholder">
+                   :placeholder="placeholder">
         </p>
     </div>
 </template>
@@ -12,7 +12,7 @@
 <script>
   export default {
     name: 'inputContainer',
-    props: ['text', 'model', 'placeholder'],
+    props: ['text', 'placeholder'],
     methods: {
       updateValue: function (value) {
         let formattedValue = value.trim()
