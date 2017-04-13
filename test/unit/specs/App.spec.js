@@ -146,61 +146,152 @@ describe('App.vue', () => {
     })
     xit('should call refreshAuto if a', function () {
     })
-    xit('should call refresh if ArrowRight', function () {
-    })
-    xit('should call refresh if r', function () {
-    })
-  })
-
-  describe('refresh', function () {
-    let promiseCall,myCells
-
-    beforeEach(function() {
+    it('should call refresh if ArrowRight', function () {
       // given
+      let promiseCall, myCells
       promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-      myCells = {x: '1', y: '1', state: 'alive'};
+      myCells = {x: '1', y: '1', state: 'alive'}
       promiseCall.resolves({
         body: {
           cells: [myCells]
         }
       })
       vm = constructAppWithProps(App)
+      let e = {}
+      e.key = 'ArrowRight'
 
       // when
-      vm.refresh()
-    });
+      vm.checkKey(e)
+
+      // then
+      expect(vm.$data.counter).to.equal(1)
+
+      // after
+      Vue.http.restore()
+    })
+    it('should call refresh if r', function () {
+      // given
+      let promiseCall, myCells
+      promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+      myCells = {x: '1', y: '1', state: 'alive'}
+      promiseCall.resolves({
+        body: {
+          cells: [myCells]
+        }
+      })
+      vm = constructAppWithProps(App)
+      let e = {}
+      e.key = 'r'
+
+      // when
+      vm.checkKey(e)
+
+      // then
+      expect(vm.$data.counter).to.equal(1)
+
+      // after
+      Vue.http.restore()
+    })
+  })
+
+  describe('refresh', function () {
+    let promiseCall, myCells
 
     afterEach(function () {
       Vue.http.restore()
-    });
-
-    it('should increase counter', function () {
-      expect(vm.$data.counter).to.equal(1)
     })
 
-    it('should call promise with correct url', function () {
-      expect(promiseCall).to.have.been.calledWith({
-        method: 'get',
-        url: 'http://localhost:9292/grids/100'
-      });
+    describe('get grid without error', function () {
+      beforeEach(function () {
+        // given
+        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        myCells = [{x: '1', y: '1', state: 'alive'}]
+        promiseCall.resolves({
+          body: myCells
+        })
+        vm = constructAppWithProps(App)
+
+        // when
+        vm.refresh()
+      })
+
+      it('should increase counter', function () {
+        expect(vm.$data.counter).to.equal(1)
+      })
+
+      it('should call promise with correct url', function () {
+        expect(promiseCall).to.have.been.calledWith({
+          method: 'get',
+          url: 'http://localhost:9292/grids/100'
+        })
+      })
+
+      it('should update cells', function () {
+        expect(vm.$data.cells).to.equal(myCells)
+      })
+
+      it('should update width', function () {
+        expect(vm.$data.width).to.equal(10)
+      })
+
+      it('should update height', function () {
+        expect(vm.$data.height).to.equal(10)
+      })
+
+      it('should change errorMessage', function () {
+        expect(vm.$data.errorMessage).to.equal('Pas d\'erreurs')
+      })
     })
 
-    xit('should update cells', function () {
-      expect(vm.$data.cells).to.equal(myCells)
-    })
+    describe('get grid with error', function () {
+      beforeEach(function () {
+        // given
+        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        myCells = [{x: '1', y: '1', state: 'alive'}]
+        promiseCall.rejects()
+        vm = constructAppWithProps(App)
 
-    xit('should update width', function () {
-      expect(vm.$data.width).to.equal(10)
-    })
+        // when
+        vm.refresh()
+      })
 
-    xit('should increase counter', function () {
-      expect(vm.$data.errorMessage).to.equal('Pas d\'erreurs')
-    })
+      xit('should call stopRefreshAuto', function () {
+        // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
+      })
 
+      it('should change errorMessage', function () {
+        expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
+      })
+    })
   })
 
   describe('refreshAutomatic', function () {
-    xit('should setInterval and call refresh', function () {})
+    it('should setInterval and call refresh', function () {
+      // given
+      let data = {
+        data: {
+          idInterval: 'Refresh Auto Not Started'
+        }
+      }
+      vm = constructAppWithProps(App, data)
+
+      // when
+      vm.refreshAutomatic()
+
+      // then
+      expect(vm.$data.idInterval).to.equal(6)
+    })
+
+    xit('state.json setInterval Call', function () {
+      this.clock = sinon.useFakeTimers()
+      var helper = new state.HELPER()
+      var mySpy = sinon.spy(helper, 'fetchState')
+
+      helper.pollStatus(mySpy, '80000', false)
+      expect(mySpy.called).to.be.true
+      this.clock.tick(80000)
+      expect(mySpy.called).to.be.true
+    })
 
     it('should NOT setInterval and call refresh when AutoRefresh already started', function () {
       // given
