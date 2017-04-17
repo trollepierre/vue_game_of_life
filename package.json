@@ -10,7 +10,7 @@
     "e2e": "node test/e2e/runner.js",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs --fix",
     "lintunit": "npm run lint & npm run unit",
-    "start": "npm run dev",
+    "start": "yarn lint && npm run dev",
     "test": "npm run unit && npm run e2e",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "watch": "npm run unit -- --watch",

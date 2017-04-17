@@ -17,6 +17,7 @@
   import Bouton from 'src/components/Bouton/Bouton'
   import Creation from 'src/components/Creation/Creation'
   import CommandContainer from 'src/components/CommandContainer/CommandContainer'
+  import eventManager from '../src/helpers/eventManager.js'
 
   export default {
     name: 'app',
@@ -106,7 +107,8 @@
         }
       },
       stopRefreshAutomatic: function () {
-        clearInterval(this.idInterval)
+        eventManager.stopCallingRefreshAuto(this.idInterval)
+        this.idInterval = 'Refresh Auto Not Started'
       },
       updateNewHeight: function (value) {
         this.newHeight = value

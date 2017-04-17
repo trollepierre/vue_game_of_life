@@ -1,10 +1,11 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import App from 'src/App';
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import App from 'src/App'
+import eventManager from '../../../src/helpers/eventManager.js'
 
 Vue.use(VueResource)
 
-function constructAppWithProps(App, data) {
+function constructAppWithProps (App, data) {
   data = data || {}
   const Constructor = Vue.extend(App)
   return new Constructor(data).$mount()
@@ -217,7 +218,6 @@ describe('App.vue', () => {
         }
         vm = constructAppWithProps(App, data)
 
-
         const dimension = {
           width: 123,
           height: 45
@@ -282,7 +282,6 @@ describe('App.vue', () => {
     })
 
     describe('get count of alive cells', function () {
-
       it('should set numberOfAliveCells to response body', function () {
         // given
         promiseCall = sinon.stub(Vue, 'http').returnsPromise()
@@ -349,7 +348,7 @@ describe('App.vue', () => {
 
           // when
           vm.refresh()
-        });
+        })
 
         it('should NOT set numberOfAliveCells ', function () {
           expect(vm.$data.numberOfAliveCells).to.equal('56')
@@ -362,7 +361,7 @@ describe('App.vue', () => {
         xit('should call stopRefreshAuto', function () {
           // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
         })
-      });
+      })
     })
   })
 
@@ -437,7 +436,6 @@ describe('App.vue', () => {
     })
 
     describe('get count of alive cells', function () {
-
       it('should set numberOfAliveCells to response body', function () {
         // given
         promiseCall = sinon.stub(Vue, 'http').returnsPromise()
@@ -504,7 +502,7 @@ describe('App.vue', () => {
 
           // when
           vm.refresh()
-        });
+        })
 
         it('should NOT set numberOfAliveCells ', function () {
           expect(vm.$data.numberOfAliveCells).to.equal('56')
@@ -517,7 +515,7 @@ describe('App.vue', () => {
         xit('should call stopRefreshAuto', function () {
           // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
         })
-      });
+      })
     })
   })
 
@@ -568,23 +566,32 @@ describe('App.vue', () => {
   })
 
   describe('stopRefreshAutomatic', function () {
-    // need stub refresh
-    xit('should use clearInterval', function () {
+    it('should call event manager', function () {
+      // given
+      const mySpy = sinon.spy(eventManager, 'stopCallingRefreshAuto')
+      vm = constructAppWithProps(App)
+
+      // when
+      vm.stopRefreshAutomatic()
+
+      // then
+      expect(mySpy.called).to.be.true
+    })
+
+    it('should call event manager', function () {
       // given
       let data = {
         data: {
-          idInterval: 'Refresh Auto Not Started'
+          idInterval: 'id has changed'
         }
       }
       vm = constructAppWithProps(App, data)
 
       // when
-      vm.refreshAutomatic()
-      expect(vm.$data.idInterval).to.equal(5)
       vm.stopRefreshAutomatic()
 
       // then
-      expect(vm.$data.idInterval).to.equal('something')
+      expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
     })
   })
 
