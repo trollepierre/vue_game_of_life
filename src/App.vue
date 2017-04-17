@@ -58,8 +58,6 @@
       },
       newCreate: function (dimension) {
         console.log('création intelligente d une nouvelle grille formattée', dimension)
-        console.log(dimension.width)
-        console.log(dimension.height)
         this.$http
           .get(this.baseUrl + 'newCreate/100/height/' + dimension.height + '/width/' + dimension.width)
           .then((response) => {
