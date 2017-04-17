@@ -58,6 +58,12 @@
         }
       },
       newCreate: function (dimension) {
+        if (dimension.height === '' || dimension.width === '' ||
+          dimension.height === '0' || dimension.width === '0') {
+          dimension.height = '50'
+          dimension.width = '100'
+        }
+
         console.log('création intelligente d une nouvelle grille formattée', dimension)
         this.$http
           .get(this.baseUrl + 'newCreate/100/height/' + dimension.height + '/width/' + dimension.width)

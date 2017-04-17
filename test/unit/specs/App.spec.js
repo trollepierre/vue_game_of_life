@@ -203,6 +203,86 @@ describe('App.vue', () => {
       Vue.http.restore()
     })
 
+    describe('when dimensions are fake, it should call promise with perfect data', function () {
+      beforeEach(function () {
+        // given
+        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        myCells = [{ x: '1', y: '1', state: 'alive' }]
+        promiseCall.resolves({
+          body: myCells
+        })
+        vm = constructAppWithProps(App)
+      })
+
+      it('when width is empty', function () {
+        // given
+        const dimension = {
+          width: '',
+          height: '45'
+        }
+
+        // when
+        vm.newCreate(dimension)
+
+        // then
+        expect(promiseCall).to.have.been.calledWith({
+          method: 'get',
+          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+        })
+      })
+
+      it('when width is null', function () {
+        // given
+        const dimension = {
+          width: '0',
+          height: '45'
+        }
+
+        // when
+        vm.newCreate(dimension)
+
+        // then
+        expect(promiseCall).to.have.been.calledWith({
+          method: 'get',
+          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+        })
+      })
+
+      it('when height is empty', function () {
+        // given
+        const dimension = {
+          width: '123',
+          height: ''
+        }
+
+        // when
+        vm.newCreate(dimension)
+
+        // then
+        expect(promiseCall).to.have.been.calledWith({
+          method: 'get',
+          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+        })
+      })
+
+      it('when height is null', function () {
+        // given
+        const dimension = {
+          width: '45',
+          height: '0'
+        }
+
+        // when
+        vm.newCreate(dimension)
+
+        // then
+        expect(promiseCall).to.have.been.calledWith({
+          method: 'get',
+          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+        })
+      })
+    })
+
     describe('get grid without error', function () {
       beforeEach(function () {
         // given
@@ -533,7 +613,7 @@ describe('App.vue', () => {
       vm.refreshAutomatic()
 
       // then
-      expect(vm.$data.idInterval).to.equal(12)
+      expect(vm.$data.idInterval >= 0).to.be.true
     })
 
     // need stub refresh
