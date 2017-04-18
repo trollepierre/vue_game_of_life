@@ -31,7 +31,7 @@
         numberOfAliveCells: 'Non connu',
         counter: 0,
         idInterval: 'Refresh Auto Not Started',
-        baseUrl: 'http://localhost:9292/',
+        baseUrl: 'https://glacial-hamlet-53356.herokuapp.com/',
         errorMessage: 'Pas d\'erreurs'
       }
     },
@@ -109,7 +109,7 @@
       },
       refreshAutomatic: function () {
         if (this.idInterval === 'Refresh Auto Not Started') {
-          this.idInterval = setInterval(this.refresh, 500)
+          this.idInterval = setInterval(this.refresh, 1000)
         }
       },
       stopRefreshAutomatic: function () {

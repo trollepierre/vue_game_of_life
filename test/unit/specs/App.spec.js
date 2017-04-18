@@ -12,8 +12,9 @@ function constructAppWithProps (App, data) {
 }
 
 describe('App.vue', () => {
-  let vm, bandeau
+  let vm, bandeau, baseUrl
   beforeEach(function () {
+    baseUrl = 'https://glacial-hamlet-53356.herokuapp.com/'
     vm = constructAppWithProps(App)
     bandeau = vm.$el.querySelector('#bandeau')
   })
@@ -125,7 +126,7 @@ describe('App.vue', () => {
       expect(vm.$data.numberOfAliveCells).to.equal('Non connu')
       expect(vm.$data.counter).to.equal(0)
       expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
-      expect(vm.$data.baseUrl).to.equal('http://localhost:9292/')
+      expect(vm.$data.baseUrl).to.equal(baseUrl)
       expect(vm.$data.errorMessage).to.equal('Pas d\'erreurs')
     })
   })
@@ -227,7 +228,7 @@ describe('App.vue', () => {
         // then
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
-          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+          url: `${baseUrl}newCreate/100/height/50/width/100`
         })
       })
 
@@ -244,7 +245,7 @@ describe('App.vue', () => {
         // then
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
-          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+          url: `${baseUrl}newCreate/100/height/50/width/100`
         })
       })
 
@@ -261,7 +262,7 @@ describe('App.vue', () => {
         // then
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
-          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+          url: `${baseUrl}newCreate/100/height/50/width/100`
         })
       })
 
@@ -278,7 +279,7 @@ describe('App.vue', () => {
         // then
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
-          url: 'http://localhost:9292/newCreate/100/height/50/width/100'
+          url: `${baseUrl}newCreate/100/height/50/width/100`
         })
       })
     })
@@ -310,7 +311,7 @@ describe('App.vue', () => {
       it('should call promise with correct url', function () {
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
-          url: 'http://localhost:9292/newCreate/100/height/45/width/123'
+          url: `${baseUrl}newCreate/100/height/45/width/123`
         })
       })
 
@@ -473,7 +474,7 @@ describe('App.vue', () => {
       it('should call promise with correct url', function () {
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
-          url: 'http://localhost:9292/grids/100'
+          url: `${baseUrl}grids/100`
         })
       })
 
