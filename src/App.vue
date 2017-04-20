@@ -32,6 +32,7 @@
         counter: 0,
         idInterval: 'Refresh Auto Not Started',
         baseUrl: 'https://glacial-hamlet-53356.herokuapp.com/',
+//        baseUrl: 'http://localhost:9292/',
         errorMessage: 'Pas d\'erreurs'
       }
     },
