@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import Grid from 'src/components/Grid/Grid';
+import Vue from 'vue'
+import Grid from 'src/components/Grid/Grid'
 
-function constructGridWithProps(Grid, propsData) {
+function constructGridWithProps (Grid, propsData) {
   const Ctor = Vue.extend(Grid)
   return new Ctor({ propsData }).$mount()
 }
@@ -53,7 +53,7 @@ describe('Grid.vue', () => {
       // const callback = sinon.stub(canvas,getContext);
       // callback.withArgs('2d').returns(ctx);
       // sinon.spy(canvas.getContext('2d'), clearRect)
-      const cells = [{"x":1,"y":1,"state":"alive"}]
+      const cells = [{'x': 1, 'y': 1, 'state': 'alive'}]
 
       // when
       vm.$options.directives.insertInCanvas.bind(canvas, { value: { cells: cells, color: 'red' } })
@@ -63,5 +63,5 @@ describe('Grid.vue', () => {
       expect(canvas.getContext('2d').hash()).to.equal(1)
       // sinon.assert.calledOnce(canvas.getContext)
     })
-  });
+  })
 })
