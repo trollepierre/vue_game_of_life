@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Grid from 'src/components/Grid/Grid'
+import Vue from 'vue';
+import Grid from 'src/components/Grid/Grid';
 
-function constructGridWithProps (Grid, propsData) {
+function constructGridWithProps(Grid, propsData) {
   const Ctor = Vue.extend(Grid)
-  return new Ctor({propsData}).$mount()
+  return new Ctor({ propsData }).$mount()
 }
 
 describe('Grid.vue', () => {
@@ -34,15 +34,34 @@ describe('Grid.vue', () => {
     expect(canvas.getAttribute('height')).to.equal(expectedHeight)
   })
 
-  xit('should bind function insertInCanvas', () => {
-    sinon.spy(vm, 'insertInCanvas')
-    vm = constructGridWithProps(Grid, {})
-    sinon.assert.calledOnce(vm.insertInCanvas)
+  it('should bind function insertInCanvas with white color', () => {
+    expect(canvas.getContext('2d').fillStyle).to.equal('#ffffff')
   })
 
-  xit('should call function insertInCanvas', () => {
-    // when
-    vm.insertInCanvas(canvas, {cells: cells, color: 'white'})
-    // then
-  })
+  describe('function insertInCanvas', function () {
+    it('should change fill style ', () => {
+      // when
+      vm.$options.directives.insertInCanvas.bind(canvas, { value: { cells: cells, color: 'red' } })
+
+      // then
+      expect(canvas.getContext('2d').fillStyle).to.equal('#ff0000')
+    })
+
+    xit('should change fillRect ', () => {
+      // given
+      // const ctx = sinon.spy();
+      // const callback = sinon.stub(canvas,getContext);
+      // callback.withArgs('2d').returns(ctx);
+      // sinon.spy(canvas.getContext('2d'), clearRect)
+      const cells = [{"x":1,"y":1,"state":"alive"}]
+
+      // when
+      vm.$options.directives.insertInCanvas.bind(canvas, { value: { cells: cells, color: 'red' } })
+
+      // then
+      console.log(canvas.getContext('2d'))
+      expect(canvas.getContext('2d').hash()).to.equal(1)
+      // sinon.assert.calledOnce(canvas.getContext)
+    })
+  });
 })
