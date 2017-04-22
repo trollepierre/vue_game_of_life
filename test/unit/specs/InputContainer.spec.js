@@ -29,48 +29,69 @@ describe('InputContainer.vue', () => {
   })
 
   describe('method updateValue', function () {
-    it('should bind updateValue with value model on input', () => {
-      // given
-      let inputElement = vm.$el.querySelector('input')
-      sinon.spy(vm, '$emit')
+    describe('when value is a number', function () {
+      it('should bind updateValue with value model on input', () => {
+        // given
+        let inputElement = vm.$el.querySelector('input')
+        sinon.spy(vm, '$emit')
 
-      // when
-      let event = new Event('input')
-      inputElement.dispatchEvent(event)
+        // when
+        let event = new Event('input')
+        inputElement.dispatchEvent(event)
 
-      // then
-      sinon.assert.calledOnce(vm.$emit)
+        // then
+        sinon.assert.calledOnce(vm.$emit)
+      })
+
+      it('should emit input and formatted value ', () => {
+        sinon.spy(vm, '$emit')
+        vm.updateValue('42')
+        sinon.assert.calledWith(vm.$emit, 'input', 42)
+      })
+
+      describe('when value should be trimmed', function () {
+        it('should format value before emitting ', () => {
+          sinon.spy(vm, '$emit')
+          vm.updateValue('42 \n ')
+          sinon.assert.calledWith(vm.$emit, 'input', 42)
+        })
+
+        it('should update value in model when formatted value is different SO when a new emit happen, the formatted value is emitted', () => {
+          // given
+          let inputElement = vm.$el.querySelector('input')
+          let event = new Event('input')
+          sinon.spy(vm, '$emit')
+
+          // when
+          vm.updateValue('42 \n ')
+
+          // then
+          inputElement.dispatchEvent(event)
+          sinon.assert.calledWith(vm.$emit, 'input', 42)
+        })
+      })
     })
 
-    it('should emit', function () {
-      sinon.spy(vm, '$emit')
+    describe('when value is NOT a number', function () {
+      it('should not emit when input is text', () => {
+        const mySpy = sinon.spy(vm, '$emit')
+        vm.updateValue('azerty')
+        expect(mySpy.called).to.be.false
+      })
 
-      vm.updateValue('hauteur')
-      sinon.assert.calledOnce(vm.$emit)
-    })
+      it('should update value in model when formatted value is different SO when a new emit happen, a zero value is emitted', () => {
+        // given
+        let inputElement = vm.$el.querySelector('input')
+        let event = new Event('input')
+        sinon.spy(vm, '$emit')
 
-    it('should emit input and formatted value ', () => {
-      sinon.spy(vm, '$emit')
-      vm.updateValue('42')
-      sinon.assert.calledWith(vm.$emit, 'input', 42)
-    })
+        // when
+        vm.updateValue('azerty \n ')
 
-    it('should format value before emitting ', () => {
-      sinon.spy(vm, '$emit')
-      vm.updateValue('42 \n ')
-      sinon.assert.calledWith(vm.$emit, 'input', 42)
-    })
-
-    xit('should update value in model when formatted value is different ', () => {
-      let inputElement = vm.$el.querySelector('input')
-      vm.updateValue('42 \n ')
-      expect(inputElement.$ref.input.value).to.equal('42')
-    })
-
-    xit('should format value before emitting ', () => {
-      sinon.spy(vm, '$emit')
-      vm.updateValue('42 \n 4')
-      sinon.assert.neverCalled(vm.$emit)
+        // then
+        inputElement.dispatchEvent(event)
+        sinon.assert.calledWith(vm.$emit, 'input', 0)
+      })
     })
   })
 })

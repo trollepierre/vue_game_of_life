@@ -16,10 +16,12 @@
     methods: {
       updateValue: function (value) {
         let formattedValue = value.trim()
-        if (formattedValue !== value) {
-          this.$refs.input.value = formattedValue
+        if (!isNaN(Number(formattedValue))) {
+          if (formattedValue !== value) {
+            this.$refs.input.value = formattedValue
+          }
+          this.$emit('input', Number(formattedValue))
         }
-        this.$emit('input', Number(formattedValue))
       }
     }
   }
