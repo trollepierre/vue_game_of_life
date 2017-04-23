@@ -30,15 +30,39 @@ describe('CommandContainer.vue', () => {
     expect(threeButtons[2].innerText).to.equal('Stop refresh Automatic')
   })
 
-  xit('should render refresh, refreshAuto and stopRefreshAuto', () => {
+  it('should render refresh', () => {
     // given
-    let $button = vm.$el.querySelector('button')
-    sinon.spy($button, '$emit')
+    let $refreshButton = vm.$el.querySelector('button.button-refresh')
+    sinon.spy(vm, '$emit')
 
     // when
-    $button.click()
+    $refreshButton.click()
 
     // then
-    sinon.assert.calledOnce($button.$emit)
+    sinon.assert.calledWith(vm.$emit, 'refresh')
+  })
+
+  it('should render refreshAuto', () => {
+    // given
+    let $refreshAutoButton = vm.$el.querySelector('button.button-refresh-automatic')
+    sinon.spy(vm, '$emit')
+
+    // when
+    $refreshAutoButton.click()
+
+    // then
+    sinon.assert.calledWith(vm.$emit, 'refreshAutomatic')
+  })
+
+  it('should render stopRefreshAuto', () => {
+    // given
+    let $stopButton = vm.$el.querySelector('button.button-stop')
+    sinon.spy(vm, '$emit')
+
+    // when
+    $stopButton.click()
+
+    // then
+    sinon.assert.calledWith(vm.$emit, 'stopRefreshAutomatic')
   })
 })
