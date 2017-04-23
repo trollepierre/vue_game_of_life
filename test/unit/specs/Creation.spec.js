@@ -32,7 +32,7 @@ describe('Creation.vue', () => {
     expect(paragraphs[0].innerText).to.contain('Hauteur de la nouvelle grille à créer :')
   })
 
-  it('should render the input container for height', () => {
+  it('should render the input container for width', () => {
     let inputContainer = vm.$options.components.InputContainer
     expect(inputContainer).to.contain(InputContainer)
 

@@ -14,7 +14,7 @@ function constructAppWithProps (App, data) {
 describe('App.vue', () => {
   let vm, bandeau, baseUrl
   beforeEach(function () {
-    baseUrl = 'https://glacial-hamconst-53356.herokuapp.com/'
+    baseUrl = 'https://glacial-hamlet-53356.herokuapp.com/'
     vm = constructAppWithProps(App)
     bandeau = vm.$el.querySelector('#bandeau')
   })
@@ -69,26 +69,73 @@ describe('App.vue', () => {
         expect(bandeau.querySelector('#creation')).not.to.be.empty
       })
 
-      xit('should only react on click', () => {
+      it('should call new create when it reacts on click', () => {
+        // given
+        let boutonCreateElement = vm.$el.querySelector('button.button-create')
+        let promiseCall
+        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        promiseCall.rejects()
 
+        // when
+        let event = new Event('click')
+        boutonCreateElement.dispatchEvent(event)
+
+        // then
+        expect(vm.$data.errorMessage).to.equal('Le get newCreate/100/height/50/width/100 est en échec')
+
+        // after
+        Vue.http.restore()
       })
     })
 
     describe('command container', function () {
+      let promiseCall
+      beforeEach(function () {
+        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        promiseCall.rejects()
+      })
+
+      afterEach(function () {
+        Vue.http.restore()
+      })
+
       it('should contain a commandContainer inside bandeau', () => {
         expect(bandeau.querySelector('#commandContainer')).not.to.be.empty
       })
 
-      xit('should react on refresh click', () => {
+      it('should call refresh when it reacts on click', () => {
+        let refreshButton = vm.$el.querySelector('button.button-refresh')
 
+        // when
+        let event = new Event('click')
+        refreshButton.dispatchEvent(event)
+
+        // then
+        expect(vm.$data.counter).to.equal(1)
       })
 
-      xit('should react on  auto refresh click', () => {
+      it('should call refreshAuto when it reacts on click', () => {
+        // given
+        let refreshAutoButton = vm.$el.querySelector('button.button-refresh-automatic')
 
+        // when
+        let event = new Event('click')
+        refreshAutoButton.dispatchEvent(event)
+
+        // then
+        expect(vm.$data.idInterval >= 0).to.be.true
       })
 
-      xit('should react on  stop refresh click', () => {
+      it('should call stopRefreshAuto when it reacts on click', () => {
+        // given
+        let stopButton = vm.$el.querySelector('button.button-stop')
 
+        // when
+        let event = new Event('click')
+        stopButton.dispatchEvent(event)
+
+        // then
+        expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
       })
     })
   })
@@ -362,7 +409,7 @@ describe('App.vue', () => {
       })
     })
 
-    describe('get count of alive cells', function () {
+    /* describe('get count of alive cells', function () {
       it('should set numberOfAliveCells to response body', function () {
         // given
         promiseCall = sinon.stub(Vue, 'http').returnsPromise()
@@ -443,7 +490,7 @@ describe('App.vue', () => {
           // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
         })
       })
-    })
+    }) */
   })
 
   describe('refresh', function () {
@@ -659,7 +706,7 @@ describe('App.vue', () => {
       expect(mySpy.called).to.be.true
     })
 
-    it('should call event manager', function () {
+    it('should reset id interval', function () {
       // given
       const data = {
         data: {
