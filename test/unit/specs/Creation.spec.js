@@ -61,7 +61,26 @@ describe('Creation.vue', () => {
   })
 
   describe('width', () => {
-    xit('should bind updateValue with value model on input', () => {
+    it('should bind updateValue with value model on input', () => {
+      // when
+      let inputContainer = vm.$el.querySelectorAll('input')[1]
+
+      // when
+      inputContainer.value = '55'
+      inputContainer.dispatchEvent(new Event('input'))
+
+      // then
+      expect(vm.$data.updatedNewWidth).to.equal(55)
+    })
+
+    it('should update new width', () => {
+      vm.width(45)
+      expect(vm.$data.updatedNewWidth).to.equal(45)
+    })
+  })
+
+  describe('height', () => {
+    it('should bind updateValue with value model on input', () => {
       // when
       let inputContainer = vm.$el.querySelectorAll('input')[0]
 
@@ -70,12 +89,12 @@ describe('Creation.vue', () => {
       inputContainer.dispatchEvent(new Event('input'))
 
       // then
-      expect(vm.$data.updatedNewWidth).to.equal(99)
+      expect(vm.$data.updatedNewHeight).to.equal(55)
     })
 
-    it('should update new width', () => {
-      vm.width(99)
-      expect(vm.$data.updatedNewWidth).to.equal(99)
+    it('should update new height', () => {
+      vm.height(99)
+      expect(vm.$data.updatedNewHeight).to.equal(99)
     })
   })
 
