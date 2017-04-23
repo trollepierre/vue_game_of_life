@@ -14,7 +14,7 @@ function constructAppWithProps (App, data) {
 describe('App.vue', () => {
   let vm, bandeau, baseUrl
   beforeEach(function () {
-    baseUrl = 'https://glacial-hamlet-53356.herokuapp.com/'
+    baseUrl = 'https://glacial-hamconst-53356.herokuapp.com/'
     vm = constructAppWithProps(App)
     bandeau = vm.$el.querySelector('#bandeau')
   })
@@ -34,7 +34,7 @@ describe('App.vue', () => {
       })
 
       it('should pass errorMessage to vue', () => {
-        let data = {
+        const data = {
           data: {
             errorMessage: 'plop'
           }
@@ -44,7 +44,7 @@ describe('App.vue', () => {
       })
 
       it('should pass numberOfAliveCells to vue', () => {
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: 'numberOfAliveCells'
           }
@@ -54,7 +54,7 @@ describe('App.vue', () => {
       })
 
       it('should pass counter to vue', () => {
-        let data = {
+        const data = {
           data: {
             counter: 'counter'
           }
@@ -99,10 +99,10 @@ describe('App.vue', () => {
     })
 
     it('should get prop cells, width, height', () => {
-      let expectedHeight = '151'
-      let expectedWidth = '235'
-      let cells = {}
-      let data = {
+      const expectedHeight = '151'
+      const expectedWidth = '235'
+      const cells = {}
+      const data = {
         data: {
           height: expectedHeight,
           width: expectedWidth,
@@ -110,7 +110,7 @@ describe('App.vue', () => {
         }
       }
       vm = constructAppWithProps(App, data)
-      let canvas = vm.$el.querySelector('canvas')
+      const canvas = vm.$el.querySelector('canvas')
       expect(canvas.getAttribute('width')).to.equal(expectedWidth)
       expect(canvas.getAttribute('height')).to.equal(expectedHeight)
     })
@@ -159,7 +159,7 @@ describe('App.vue', () => {
         }
       })
       vm = constructAppWithProps(App)
-      let e = {}
+      const e = {}
       e.key = 'ArrowRight'
 
       // when
@@ -183,7 +183,7 @@ describe('App.vue', () => {
         }
       })
       vm = constructAppWithProps(App)
-      let e = {}
+      const e = {}
       e.key = 'r'
 
       // when
@@ -292,7 +292,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: myCells
         })
-        let data = {
+        const data = {
           data: {
             counter: 78
           }
@@ -373,7 +373,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '88'
         })
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -397,7 +397,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '0'
         })
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -420,7 +420,7 @@ describe('App.vue', () => {
             body: myCells
           })
           promiseCall.rejects({})
-          let data = {
+          const data = {
             data: {
               numberOfAliveCells: '56'
             }
@@ -527,7 +527,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '88'
         })
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -551,7 +551,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '0'
         })
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -574,7 +574,7 @@ describe('App.vue', () => {
             body: myCells
           })
           promiseCall.rejects({})
-          let data = {
+          const data = {
             data: {
               numberOfAliveCells: '56'
             }
@@ -603,7 +603,7 @@ describe('App.vue', () => {
   describe('refreshAutomatic', function () {
     it('should setInterval and call refresh', function () {
       // given
-      let data = {
+      const data = {
         data: {
           idInterval: 'Refresh Auto Not Started'
         }
@@ -620,8 +620,8 @@ describe('App.vue', () => {
     // need stub refresh
     xit('state.json setInterval Call', function () {
       this.clock = sinon.useFakeTimers()
-      var helper = new state.HELPER()
-      var mySpy = sinon.spy(helper, 'fetchState')
+      const helper = new state.HELPER()
+      const mySpy = sinon.spy(helper, 'fetchState')
 
       helper.pollStatus(mySpy, '80000', false)
       expect(mySpy.called).to.be.true
@@ -631,7 +631,7 @@ describe('App.vue', () => {
 
     it('should NOT setInterval and call refresh when AutoRefresh already started', function () {
       // given
-      let data = {
+      const data = {
         data: {
           idInterval: 'id has changed'
         }
@@ -661,7 +661,7 @@ describe('App.vue', () => {
 
     it('should call event manager', function () {
       // given
-      let data = {
+      const data = {
         data: {
           idInterval: 'id has changed'
         }
@@ -679,7 +679,7 @@ describe('App.vue', () => {
   describe('updateNewHeight', function () {
     it('should replace newHeight by value', function () {
       // given
-      let value = 17432
+      const value = 17432
 
       // when
       vm.updateNewHeight(value)
@@ -692,7 +692,7 @@ describe('App.vue', () => {
   describe('updateNewWidth', function () {
     it('should replace newWidth by value', function () {
       // given
-      let value = 17432
+      const value = 17432
 
       // when
       vm.updateNewWidth(value)
