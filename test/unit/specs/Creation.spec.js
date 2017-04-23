@@ -32,12 +32,6 @@ describe('Creation.vue', () => {
     expect(paragraphs[0].innerText).to.contain('Hauteur de la nouvelle grille à créer :')
   })
 
-  xit('should render the input container for height', () => {
-    // le TU complémentaire pour remplacer le TI
-    expect(vm.$options.components.InputContainer.props.placeholder).to.equal('placeholder')
-    expect(vm.$options.components.InputContainer.props.text).to.equal('text')
-  })
-
   it('should render the input container for height', () => {
     let inputContainer = vm.$options.components.InputContainer
     expect(inputContainer).to.contain(InputContainer)
