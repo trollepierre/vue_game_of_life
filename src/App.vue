@@ -114,7 +114,7 @@
       },
       refreshAutomatic: function () {
         if (this.idInterval === 'Refresh Auto Not Started') {
-          this.idInterval = setInterval(this.refresh, 1000)
+          this.idInterval = eventManager.setIntervalRefresh(this.refresh)
         }
       },
       stopRefreshAutomatic: function () {

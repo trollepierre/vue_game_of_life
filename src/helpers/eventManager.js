@@ -3,6 +3,10 @@ export default {
 
   stopCallingRefreshAuto (idInterval) {
     clearInterval(idInterval)
+  },
+
+  setIntervalRefresh (refresh) {
+    setInterval(refresh, 1000)
   }
 
 }

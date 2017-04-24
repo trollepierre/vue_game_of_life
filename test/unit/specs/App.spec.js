@@ -117,13 +117,23 @@ describe('App.vue', () => {
       it('should call refreshAuto when it reacts on click', () => {
         // given
         let refreshAutoButton = vm.$el.querySelector('button.button-refresh-automatic')
+        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        let data = {
+          data: {
+            idInterval: 'Refresh Auto Not Started'
+          }
+        }
+        vm = constructAppWithProps(App, data)
 
         // when
         let event = new Event('click')
         refreshAutoButton.dispatchEvent(event)
 
         // then
-        expect(vm.$data.idInterval >= 0).to.be.true
+        expect(mySpy).to.have.been.called
+
+        // after
+        eventManager.setIntervalRefresh.restore()
       })
 
       it('should call stopRefreshAuto when it reacts on click', () => {
@@ -259,6 +269,13 @@ describe('App.vue', () => {
     describe('should call refreshAuto on', function () {
       it('Enter', function () {
         // given
+        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        let data = {
+          data: {
+            idInterval: 'Refresh Auto Not Started'
+          }
+        }
+        vm = constructAppWithProps(App, data)
         let e = {}
         e.key = 'Enter'
 
@@ -266,10 +283,21 @@ describe('App.vue', () => {
         vm.checkKey(e)
 
         // then
-        expect(vm.$data.idInterval >= 0).to.be.true
+        expect(mySpy).to.have.been.calledWith(vm.refresh)
+
+        // after
+        eventManager.setIntervalRefresh.restore()
       })
+
       it('a', function () {
         // given
+        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        let data = {
+          data: {
+            idInterval: 'Refresh Auto Not Started'
+          }
+        }
+        vm = constructAppWithProps(App, data)
         let e = {}
         e.key = 'a'
 
@@ -277,7 +305,10 @@ describe('App.vue', () => {
         vm.checkKey(e)
 
         // then
-        expect(vm.$data.idInterval >= 0).to.be.true
+        expect(mySpy).to.have.been.calledWith(vm.refresh)
+
+        // after
+        eventManager.setIntervalRefresh.restore()
       })
     })
 
@@ -325,6 +356,11 @@ describe('App.vue', () => {
   describe('newCreate', function () {
     let promiseCall, myCells
 
+    beforeEach(function () {
+      promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+      myCells = [{ x: '1', y: '1', state: 'alive' }]
+    })
+
     afterEach(function () {
       Vue.http.restore()
     })
@@ -332,8 +368,6 @@ describe('App.vue', () => {
     describe('when dimensions are fake, it should call promise with perfect data', function () {
       beforeEach(function () {
         // given
-        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-        myCells = [{ x: '1', y: '1', state: 'alive' }]
         promiseCall.resolves({
           body: myCells
         })
@@ -410,10 +444,9 @@ describe('App.vue', () => {
     })
 
     describe('get grid without error', function () {
+      let dimension
       beforeEach(function () {
         // given
-        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-        myCells = [{ x: '1', y: '1', state: 'alive' }]
         promiseCall.resolves({
           body: myCells
         })
@@ -424,16 +457,17 @@ describe('App.vue', () => {
         }
         vm = constructAppWithProps(App, data)
 
-        let dimension = {
+        dimension = {
           width: 123,
           height: 45
         }
-
-        // when
-        vm.newCreate(dimension)
       })
 
       it('should call promise with correct url', function () {
+        // when
+        vm.newCreate(dimension)
+
+        // then
         expect(promiseCall).to.have.been.calledWith({
           method: 'get',
           url: `${baseUrl}newCreate/100/height/45/width/123`
@@ -441,134 +475,94 @@ describe('App.vue', () => {
       })
 
       it('should update cells', function () {
+        // when
+        vm.newCreate(dimension)
+
+        // then
         expect(vm.$data.cells).to.equal(myCells)
       })
 
       it('should update width', function () {
+        // when
+        vm.newCreate(dimension)
+
+        // then
         expect(vm.$data.width).to.equal(10)
       })
 
       it('should update height', function () {
+        // when
+        vm.newCreate(dimension)
+
+        // then
         expect(vm.$data.height).to.equal(10)
       })
 
       it('should reset counter', function () {
+        // when
+        vm.newCreate(dimension)
+
+        // then
         expect(vm.$data.counter).to.equal(0)
       })
 
-      xit('should call refresh auto', function () {
-        // expect(vm.$data.errorMessage).to.equal('Pas d\'erreurs')
+      it('should call refresh auto', function () {
+        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        let data = {
+          data: {
+            idInterval: 'Refresh Auto Not Started'
+          }
+        }
+        vm = constructAppWithProps(App, data)
+
+        // when
+        vm.newCreate(dimension)
+
+        // then
+        expect(mySpy).to.have.been.calledWith(vm.refresh)
+
+        // after
+        eventManager.setIntervalRefresh.restore()
       })
     })
 
     describe('get grid with error', function () {
+      let dimension
       beforeEach(function () {
         // given
-        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-        myCells = [{ x: '1', y: '1', state: 'alive' }]
         promiseCall.rejects()
         vm = constructAppWithProps(App)
 
-        let dimension = {
+        dimension = {
           width: 123,
           height: 45
         }
+      })
+
+      it('should call stopRefreshAuto', function () {
+        // given
+        let data = {
+          data: {
+            idInterval: 'id has changed'
+          }
+        }
+        vm = constructAppWithProps(App, data)
 
         // when
         vm.newCreate(dimension)
-      })
 
-      xit('should call stopRefreshAuto', function () {
-        // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
+        // then
+        expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
       })
 
       it('should change errorMessage', function () {
+        // when
+        vm.newCreate(dimension)
+
+        // then
         expect(vm.$data.errorMessage).to.equal('Le get newCreate/100/height/45/width/123 est en échec')
       })
     })
-
-    /* describe('get count of alive cells', function () {
-     it('should set numberOfAliveCells to response body', function () {
-     // given
-     promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-     myCells = [{ x: '1', y: '1', state: 'alive' }]
-     promiseCall.resolves({
-     body: myCells
-     })
-     promiseCall.resolves({
-     body: '88'
-     })
-     let data = {
-     data: {
-     numberOfAliveCells: '56'
-     }
-     }
-     vm = constructAppWithProps(App, data)
-
-     // when
-     vm.refresh()
-
-     // then
-     expect(vm.$data.numberOfAliveCells).to.equal('88')
-     })
-
-     it('should NOT set numberOfAliveCells when response body is null', function () {
-     // given
-     promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-     myCells = [{ x: '1', y: '1', state: 'alive' }]
-     promiseCall.resolves({
-     body: myCells
-     })
-     promiseCall.resolves({
-     body: '0'
-     })
-     let data = {
-     data: {
-     numberOfAliveCells: '56'
-     }
-     }
-     vm = constructAppWithProps(App, data)
-
-     // when
-     vm.refresh()
-
-     // then
-     expect(vm.$data.numberOfAliveCells).to.equal('56')
-     })
-
-     describe('when count promise is rejected', function () {
-     beforeEach(function () {
-     // given
-     promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-     myCells = [{ x: '1', y: '1', state: 'alive' }]
-     promiseCall.resolves({
-     body: myCells
-     })
-     promiseCall.rejects({})
-     let data = {
-     data: {
-     numberOfAliveCells: '56'
-     }
-     }
-     vm = constructAppWithProps(App, data)
-
-     // when
-     vm.refresh()
-     })
-
-     it('should NOT set numberOfAliveCells ', function () {
-     expect(vm.$data.numberOfAliveCells).to.equal('56')
-     })
-
-     it('should set error message ', function () {
-     expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
-     })
-
-     xit('should call stopRefreshAuto', function () {
-     // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
-     })
-     })
-     }) */
   })
 
   describe('refresh', function () {
@@ -626,17 +620,32 @@ describe('App.vue', () => {
         promiseCall = sinon.stub(Vue, 'http').returnsPromise()
         myCells = [{ x: '1', y: '1', state: 'alive' }]
         promiseCall.rejects()
+      })
+
+      it('should call stopRefreshAuto', function () {
+        // given
+        let data = {
+          data: {
+            idInterval: 'id has changed'
+          }
+        }
+        vm = constructAppWithProps(App, data)
+
+        // when
+        vm.refresh()
+
+        // then
+        expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
+      })
+
+      it('should change errorMessage', function () {
+        // given
         vm = constructAppWithProps(App)
 
         // when
         vm.refresh()
-      })
 
-      xit('should call stopRefreshAuto', function () {
-        // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
-      })
-
-      it('should change errorMessage', function () {
+        // then
         expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
       })
     })
@@ -718,16 +727,29 @@ describe('App.vue', () => {
           expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
         })
 
-        xit('should call stopRefreshAuto', function () {
-          // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
+        it('should call stopRefreshAuto', function () {
+          // given
+          let data = {
+            data: {
+              idInterval: 'id has changed'
+            }
+          }
+          vm = constructAppWithProps(App, data)
+
+          // when
+          vm.refresh()
+
+          // then
+          expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
         })
       })
     })
   })
 
   describe('refreshAutomatic', function () {
-    it('should setInterval and call refresh', function () {
+    it('should setInterval when id interval not setted', function () {
       // given
+      let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
       let data = {
         data: {
           idInterval: 'Refresh Auto Not Started'
@@ -739,19 +761,10 @@ describe('App.vue', () => {
       vm.refreshAutomatic()
 
       // then
-      expect(vm.$data.idInterval >= 0).to.be.true
-    })
+      expect(mySpy).to.have.been.calledWith(vm.refresh)
 
-    // need stub refresh
-    xit('state.json setInterval Call', function () {
-      this.clock = sinon.useFakeTimers()
-      let helper = new state.HELPER()
-      let mySpy = sinon.spy(helper, 'fetchState')
-
-      helper.pollStatus(mySpy, '80000', false)
-      expect(mySpy.called).to.be.true
-      this.clock.tick(80000)
-      expect(mySpy.called).to.be.true
+      // after
+      eventManager.setIntervalRefresh.restore()
     })
 
     it('should NOT setInterval and call refresh when AutoRefresh already started', function () {
