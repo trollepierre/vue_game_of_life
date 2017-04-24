@@ -49,7 +49,11 @@
     methods: {
       checkKey: function (e) {
         if (e.key === 'c') {
-          this.newCreate()
+          let dimension = {
+            height: this.height + '',
+            width: this.width + ''
+          }
+          this.newCreate(dimension)
         } else if (e.key === 'Escape' || e.key === 's') {
           this.stopRefreshAutomatic()
         } else if (e.key === 'Enter' || e.key === 'a') {

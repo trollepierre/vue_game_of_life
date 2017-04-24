@@ -44,7 +44,7 @@ describe('App.vue', () => {
       })
 
       it('should pass numberOfAliveCells to vue', () => {
-        const data = {
+        let data = {
           data: {
             numberOfAliveCells: 'numberOfAliveCells'
           }
@@ -54,7 +54,7 @@ describe('App.vue', () => {
       })
 
       it('should pass counter to vue', () => {
-        const data = {
+        let data = {
           data: {
             counter: 'counter'
           }
@@ -146,10 +146,10 @@ describe('App.vue', () => {
     })
 
     it('should get prop cells, width, height', () => {
-      const expectedHeight = '151'
-      const expectedWidth = '235'
-      const cells = {}
-      const data = {
+      let expectedHeight = '151'
+      let expectedWidth = '235'
+      let cells = {}
+      let data = {
         data: {
           height: expectedHeight,
           width: expectedWidth,
@@ -157,7 +157,7 @@ describe('App.vue', () => {
         }
       }
       vm = constructAppWithProps(App, data)
-      const canvas = vm.$el.querySelector('canvas')
+      let canvas = vm.$el.querySelector('canvas')
       expect(canvas.getAttribute('width')).to.equal(expectedWidth)
       expect(canvas.getAttribute('height')).to.equal(expectedHeight)
     })
@@ -180,67 +180,145 @@ describe('App.vue', () => {
 
   describe('created', function () {
     xit('should add event listener', function () {
+      // when
+      let event = new Event('keyup', 'ArrowRight')
+      vm.$el.dispatchEvent(event)
 
+      // then
+      expect(vm.$data.counter).to.equal(1)
+
+      // => extraire checkKey dans eventManager
     })
   })
 
   describe('checkKey', function () {
-    xit('should call newCreate if c', function () {
-    })
-    xit('should call stopRefreshAuto if Escape', function () {
-    })
-    xit('should call stopRefreshAuto if s', function () {
-    })
-    xit('should call refreshAuto if Enter', function () {
-    })
-    xit('should call refreshAuto if a', function () {
-    })
-    it('should call refresh if ArrowRight', function () {
+    it('should call newCreate if c', function () {
       // given
-      let promiseCall, myCells
-      promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-      myCells = { x: '1', y: '1', state: 'alive' }
+      let promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+      let myCells = [{ x: '1', y: '1', state: 'alive' }]
       promiseCall.resolves({
-        body: {
-          cells: [myCells]
-        }
+        body: myCells
       })
       vm = constructAppWithProps(App)
-      const e = {}
-      e.key = 'ArrowRight'
+
+      let e = {}
+      e.key = 'c'
 
       // when
       vm.checkKey(e)
 
       // then
-      expect(vm.$data.counter).to.equal(1)
+      expect(promiseCall).to.have.been.calledWith({
+        method: 'get',
+        url: `${baseUrl}newCreate/100/height/500/width/1000`
+      })
 
       // after
       Vue.http.restore()
     })
 
-    it('should call refresh if r', function () {
-      // given
-      let promiseCall, myCells
-      promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-      myCells = { x: '1', y: '1', state: 'alive' }
-      promiseCall.resolves({
-        body: {
-          cells: [myCells]
+    describe('should call stopRefreshAuto on', function () {
+      it('Escape', function () {
+        // given
+        let data = {
+          data: {
+            idInterval: 'id has changed'
+          }
         }
+        vm = constructAppWithProps(App, data)
+        let e = {}
+        e.key = 'Escape'
+
+        // when
+        vm.checkKey(e)
+
+        // then
+        expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
       })
-      vm = constructAppWithProps(App)
-      const e = {}
-      e.key = 'r'
 
-      // when
-      vm.checkKey(e)
+      it('s', function () {
+        // given
+        let data = {
+          data: {
+            idInterval: 'id has changed'
+          }
+        }
+        vm = constructAppWithProps(App, data)
 
-      // then
-      expect(vm.$data.counter).to.equal(1)
+        let e = {}
+        e.key = 's'
 
-      // after
-      Vue.http.restore()
+        // when
+        vm.checkKey(e)
+
+        // then
+        expect(vm.$data.idInterval).to.equal('Refresh Auto Not Started')
+      })
+    })
+
+    describe('should call refreshAuto on', function () {
+      it('Enter', function () {
+        // given
+        let e = {}
+        e.key = 'Enter'
+
+        // when
+        vm.checkKey(e)
+
+        // then
+        expect(vm.$data.idInterval >= 0).to.be.true
+      })
+      it('a', function () {
+        // given
+        let e = {}
+        e.key = 'a'
+
+        // when
+        vm.checkKey(e)
+
+        // then
+        expect(vm.$data.idInterval >= 0).to.be.true
+      })
+    })
+
+    describe('should call refresh on', function () {
+      let promiseCall, myCells, e
+      beforeEach(function () {
+        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        myCells = { x: '1', y: '1', state: 'alive' }
+        promiseCall.resolves({
+          body: {
+            cells: [myCells]
+          }
+        })
+        e = {}
+      })
+
+      afterEach(function () {
+        Vue.http.restore()
+      })
+
+      it('key ArrowRight', function () {
+        // given
+        e.key = 'ArrowRight'
+
+        // when
+        vm.checkKey(e)
+
+        // then
+        expect(vm.$data.counter).to.equal(1)
+      })
+
+      it('key r', function () {
+        // given
+        e.key = 'r'
+
+        // when
+        vm.checkKey(e)
+
+        // then
+        expect(vm.$data.counter).to.equal(1)
+      })
     })
   })
 
@@ -264,7 +342,7 @@ describe('App.vue', () => {
 
       it('when width is empty', function () {
         // given
-        const dimension = {
+        let dimension = {
           width: '',
           height: '45'
         }
@@ -281,7 +359,7 @@ describe('App.vue', () => {
 
       it('when width is null', function () {
         // given
-        const dimension = {
+        let dimension = {
           width: '0',
           height: '45'
         }
@@ -298,7 +376,7 @@ describe('App.vue', () => {
 
       it('when height is empty', function () {
         // given
-        const dimension = {
+        let dimension = {
           width: '123',
           height: ''
         }
@@ -315,7 +393,7 @@ describe('App.vue', () => {
 
       it('when height is null', function () {
         // given
-        const dimension = {
+        let dimension = {
           width: '45',
           height: '0'
         }
@@ -339,14 +417,14 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: myCells
         })
-        const data = {
+        let data = {
           data: {
             counter: 78
           }
         }
         vm = constructAppWithProps(App, data)
 
-        const dimension = {
+        let dimension = {
           width: 123,
           height: 45
         }
@@ -391,7 +469,7 @@ describe('App.vue', () => {
         promiseCall.rejects()
         vm = constructAppWithProps(App)
 
-        const dimension = {
+        let dimension = {
           width: 123,
           height: 45
         }
@@ -410,87 +488,87 @@ describe('App.vue', () => {
     })
 
     /* describe('get count of alive cells', function () {
-      it('should set numberOfAliveCells to response body', function () {
-        // given
-        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-        myCells = [{ x: '1', y: '1', state: 'alive' }]
-        promiseCall.resolves({
-          body: myCells
-        })
-        promiseCall.resolves({
-          body: '88'
-        })
-        const data = {
-          data: {
-            numberOfAliveCells: '56'
-          }
-        }
-        vm = constructAppWithProps(App, data)
+     it('should set numberOfAliveCells to response body', function () {
+     // given
+     promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+     myCells = [{ x: '1', y: '1', state: 'alive' }]
+     promiseCall.resolves({
+     body: myCells
+     })
+     promiseCall.resolves({
+     body: '88'
+     })
+     let data = {
+     data: {
+     numberOfAliveCells: '56'
+     }
+     }
+     vm = constructAppWithProps(App, data)
 
-        // when
-        vm.refresh()
+     // when
+     vm.refresh()
 
-        // then
-        expect(vm.$data.numberOfAliveCells).to.equal('88')
-      })
+     // then
+     expect(vm.$data.numberOfAliveCells).to.equal('88')
+     })
 
-      it('should NOT set numberOfAliveCells when response body is null', function () {
-        // given
-        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-        myCells = [{ x: '1', y: '1', state: 'alive' }]
-        promiseCall.resolves({
-          body: myCells
-        })
-        promiseCall.resolves({
-          body: '0'
-        })
-        const data = {
-          data: {
-            numberOfAliveCells: '56'
-          }
-        }
-        vm = constructAppWithProps(App, data)
+     it('should NOT set numberOfAliveCells when response body is null', function () {
+     // given
+     promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+     myCells = [{ x: '1', y: '1', state: 'alive' }]
+     promiseCall.resolves({
+     body: myCells
+     })
+     promiseCall.resolves({
+     body: '0'
+     })
+     let data = {
+     data: {
+     numberOfAliveCells: '56'
+     }
+     }
+     vm = constructAppWithProps(App, data)
 
-        // when
-        vm.refresh()
+     // when
+     vm.refresh()
 
-        // then
-        expect(vm.$data.numberOfAliveCells).to.equal('56')
-      })
+     // then
+     expect(vm.$data.numberOfAliveCells).to.equal('56')
+     })
 
-      describe('when count promise is rejected', function () {
-        beforeEach(function () {
-          // given
-          promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-          myCells = [{ x: '1', y: '1', state: 'alive' }]
-          promiseCall.resolves({
-            body: myCells
-          })
-          promiseCall.rejects({})
-          const data = {
-            data: {
-              numberOfAliveCells: '56'
-            }
-          }
-          vm = constructAppWithProps(App, data)
+     describe('when count promise is rejected', function () {
+     beforeEach(function () {
+     // given
+     promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+     myCells = [{ x: '1', y: '1', state: 'alive' }]
+     promiseCall.resolves({
+     body: myCells
+     })
+     promiseCall.rejects({})
+     let data = {
+     data: {
+     numberOfAliveCells: '56'
+     }
+     }
+     vm = constructAppWithProps(App, data)
 
-          // when
-          vm.refresh()
-        })
+     // when
+     vm.refresh()
+     })
 
-        it('should NOT set numberOfAliveCells ', function () {
-          expect(vm.$data.numberOfAliveCells).to.equal('56')
-        })
+     it('should NOT set numberOfAliveCells ', function () {
+     expect(vm.$data.numberOfAliveCells).to.equal('56')
+     })
 
-        it('should set error message ', function () {
-          expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
-        })
+     it('should set error message ', function () {
+     expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
+     })
 
-        xit('should call stopRefreshAuto', function () {
-          // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
-        })
-      })
-    }) */
+     xit('should call stopRefreshAuto', function () {
+     // expect(vm.$data.errorMessage).to.equal('La Base semble être KO !')
+     })
+     })
+     }) */
   })
 
   describe('refresh', function () {
@@ -574,7 +652,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '88'
         })
-        const data = {
+        let data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -598,7 +676,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '0'
         })
-        const data = {
+        let data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -621,7 +699,7 @@ describe('App.vue', () => {
             body: myCells
           })
           promiseCall.rejects({})
-          const data = {
+          let data = {
             data: {
               numberOfAliveCells: '56'
             }
@@ -650,7 +728,7 @@ describe('App.vue', () => {
   describe('refreshAutomatic', function () {
     it('should setInterval and call refresh', function () {
       // given
-      const data = {
+      let data = {
         data: {
           idInterval: 'Refresh Auto Not Started'
         }
@@ -667,8 +745,8 @@ describe('App.vue', () => {
     // need stub refresh
     xit('state.json setInterval Call', function () {
       this.clock = sinon.useFakeTimers()
-      const helper = new state.HELPER()
-      const mySpy = sinon.spy(helper, 'fetchState')
+      let helper = new state.HELPER()
+      let mySpy = sinon.spy(helper, 'fetchState')
 
       helper.pollStatus(mySpy, '80000', false)
       expect(mySpy.called).to.be.true
@@ -678,7 +756,7 @@ describe('App.vue', () => {
 
     it('should NOT setInterval and call refresh when AutoRefresh already started', function () {
       // given
-      const data = {
+      let data = {
         data: {
           idInterval: 'id has changed'
         }
@@ -696,7 +774,7 @@ describe('App.vue', () => {
   describe('stopRefreshAutomatic', function () {
     it('should call event manager', function () {
       // given
-      const mySpy = sinon.spy(eventManager, 'stopCallingRefreshAuto')
+      let mySpy = sinon.spy(eventManager, 'stopCallingRefreshAuto')
       vm = constructAppWithProps(App)
 
       // when
@@ -708,7 +786,7 @@ describe('App.vue', () => {
 
     it('should reset id interval', function () {
       // given
-      const data = {
+      let data = {
         data: {
           idInterval: 'id has changed'
         }
@@ -726,7 +804,7 @@ describe('App.vue', () => {
   describe('updateNewHeight', function () {
     it('should replace newHeight by value', function () {
       // given
-      const value = 17432
+      let value = 17432
 
       // when
       vm.updateNewHeight(value)
@@ -739,7 +817,7 @@ describe('App.vue', () => {
   describe('updateNewWidth', function () {
     it('should replace newWidth by value', function () {
       // given
-      const value = 17432
+      let value = 17432
 
       // when
       vm.updateNewWidth(value)
