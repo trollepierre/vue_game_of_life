@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import App from 'src/App'
-import eventManager from '../../../src/helpers/eventManager.js'
+import Vue from 'vue';
+import VueResource from 'vue-resource';
+import App from 'src/App';
+import eventManager from '../../../src/helpers/eventManager.js';
 
 Vue.use(VueResource)
 
-function constructAppWithProps (App, data) {
+function constructAppWithProps(App, data) {
   data = data || {}
   const Constructor = Vue.extend(App)
   return new Constructor(data).$mount()
@@ -44,7 +44,7 @@ describe('App.vue', () => {
       })
 
       it('should pass numberOfAliveCells to vue', () => {
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: 'numberOfAliveCells'
           }
@@ -54,7 +54,7 @@ describe('App.vue', () => {
       })
 
       it('should pass counter to vue', () => {
-        let data = {
+        const data = {
           data: {
             counter: 'counter'
           }
@@ -71,13 +71,12 @@ describe('App.vue', () => {
 
       it('should call new create when it reacts on click', () => {
         // given
-        let boutonCreateElement = vm.$el.querySelector('button.button-create')
-        let promiseCall
-        promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+        const boutonCreateElement = vm.$el.querySelector('button.button-create')
+        const promiseCall = sinon.stub(Vue, 'http').returnsPromise()
         promiseCall.rejects()
 
         // when
-        let event = new Event('click')
+        const event = new Event('click')
         boutonCreateElement.dispatchEvent(event)
 
         // then
@@ -104,10 +103,11 @@ describe('App.vue', () => {
       })
 
       it('should call refresh when it reacts on click', () => {
-        let refreshButton = vm.$el.querySelector('button.button-refresh')
+        // given
+        const refreshButton = vm.$el.querySelector('button.button-refresh')
 
         // when
-        let event = new Event('click')
+        const event = new Event('click')
         refreshButton.dispatchEvent(event)
 
         // then
@@ -116,9 +116,9 @@ describe('App.vue', () => {
 
       it('should call refreshAuto when it reacts on click', () => {
         // given
-        let refreshAutoButton = vm.$el.querySelector('button.button-refresh-automatic')
-        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
-        let data = {
+        const refreshAutoButton = vm.$el.querySelector('button.button-refresh-automatic')
+        const mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        const data = {
           data: {
             idInterval: 'Refresh Auto Not Started'
           }
@@ -126,7 +126,7 @@ describe('App.vue', () => {
         vm = constructAppWithProps(App, data)
 
         // when
-        let event = new Event('click')
+        const event = new Event('click')
         refreshAutoButton.dispatchEvent(event)
 
         // then
@@ -138,10 +138,10 @@ describe('App.vue', () => {
 
       it('should call stopRefreshAuto when it reacts on click', () => {
         // given
-        let stopButton = vm.$el.querySelector('button.button-stop')
+        const stopButton = vm.$el.querySelector('button.button-stop')
 
         // when
-        let event = new Event('click')
+        const event = new Event('click')
         stopButton.dispatchEvent(event)
 
         // then
@@ -156,18 +156,23 @@ describe('App.vue', () => {
     })
 
     it('should get prop cells, width, height', () => {
-      let expectedHeight = '151'
-      let expectedWidth = '235'
-      let cells = {}
-      let data = {
+      // given
+      const expectedHeight = '151'
+      const expectedWidth = '235'
+      const cells = {}
+      const data = {
         data: {
           height: expectedHeight,
           width: expectedWidth,
           cells: cells
         }
       }
+
+      // when
       vm = constructAppWithProps(App, data)
-      let canvas = vm.$el.querySelector('canvas')
+
+      // then
+      const canvas = vm.$el.querySelector('canvas')
       expect(canvas.getAttribute('width')).to.equal(expectedWidth)
       expect(canvas.getAttribute('height')).to.equal(expectedHeight)
     })
@@ -191,7 +196,7 @@ describe('App.vue', () => {
   describe('created', function () {
     xit('should add event listener', function () {
       // when
-      let event = new Event('keyup', 'ArrowRight')
+      const event = new Event('keyup', 'ArrowRight')
       vm.$el.dispatchEvent(event)
 
       // then
@@ -202,16 +207,43 @@ describe('App.vue', () => {
   })
 
   describe('checkKey', function () {
+    it('should call nothing if key is not known', function () {
+      // given
+      const promiseCall = sinon.stub(Vue, 'http')
+      const mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+      const data = {
+        data: {
+          idInterval: 'id has changed'
+        }
+      }
+      vm = constructAppWithProps(App, data)
+      const e = {}
+      e.key = 'b'
+
+      // when
+      vm.checkKey(e)
+
+      // then
+      expect(vm.$data.counter).to.equal(0)
+      expect(vm.$data.idInterval).not.to.equal('Refresh Auto Not Started')
+      expect(promiseCall).not.to.have.been.called
+      expect(mySpy).not.to.have.been.called
+
+      // after
+      Vue.http.restore()
+      eventManager.setIntervalRefresh.restore()
+    })
+
     it('should call newCreate if c', function () {
       // given
-      let promiseCall = sinon.stub(Vue, 'http').returnsPromise()
-      let myCells = [{ x: '1', y: '1', state: 'alive' }]
+      const promiseCall = sinon.stub(Vue, 'http').returnsPromise()
+      const myCells = [{ x: '1', y: '1', state: 'alive' }]
       promiseCall.resolves({
         body: myCells
       })
       vm = constructAppWithProps(App)
 
-      let e = {}
+      const e = {}
       e.key = 'c'
 
       // when
@@ -230,13 +262,13 @@ describe('App.vue', () => {
     describe('should call stopRefreshAuto on', function () {
       it('Escape', function () {
         // given
-        let data = {
+        const data = {
           data: {
             idInterval: 'id has changed'
           }
         }
         vm = constructAppWithProps(App, data)
-        let e = {}
+        const e = {}
         e.key = 'Escape'
 
         // when
@@ -248,14 +280,14 @@ describe('App.vue', () => {
 
       it('s', function () {
         // given
-        let data = {
+        const data = {
           data: {
             idInterval: 'id has changed'
           }
         }
         vm = constructAppWithProps(App, data)
 
-        let e = {}
+        const e = {}
         e.key = 's'
 
         // when
@@ -269,14 +301,14 @@ describe('App.vue', () => {
     describe('should call refreshAuto on', function () {
       it('Enter', function () {
         // given
-        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
-        let data = {
+        const mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        const data = {
           data: {
             idInterval: 'Refresh Auto Not Started'
           }
         }
         vm = constructAppWithProps(App, data)
-        let e = {}
+        const e = {}
         e.key = 'Enter'
 
         // when
@@ -291,14 +323,14 @@ describe('App.vue', () => {
 
       it('a', function () {
         // given
-        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
-        let data = {
+        const mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        const data = {
           data: {
             idInterval: 'Refresh Auto Not Started'
           }
         }
         vm = constructAppWithProps(App, data)
-        let e = {}
+        const e = {}
         e.key = 'a'
 
         // when
@@ -376,7 +408,7 @@ describe('App.vue', () => {
 
       it('when width is empty', function () {
         // given
-        let dimension = {
+        const dimension = {
           width: '',
           height: '45'
         }
@@ -393,7 +425,7 @@ describe('App.vue', () => {
 
       it('when width is null', function () {
         // given
-        let dimension = {
+        const dimension = {
           width: '0',
           height: '45'
         }
@@ -410,7 +442,7 @@ describe('App.vue', () => {
 
       it('when height is empty', function () {
         // given
-        let dimension = {
+        const dimension = {
           width: '123',
           height: ''
         }
@@ -427,7 +459,7 @@ describe('App.vue', () => {
 
       it('when height is null', function () {
         // given
-        let dimension = {
+        const dimension = {
           width: '45',
           height: '0'
         }
@@ -450,7 +482,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: myCells
         })
-        let data = {
+        const data = {
           data: {
             counter: 78
           }
@@ -507,8 +539,8 @@ describe('App.vue', () => {
       })
 
       it('should call refresh auto', function () {
-        let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
-        let data = {
+        const mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+        const data = {
           data: {
             idInterval: 'Refresh Auto Not Started'
           }
@@ -541,7 +573,7 @@ describe('App.vue', () => {
 
       it('should call stopRefreshAuto', function () {
         // given
-        let data = {
+        const data = {
           data: {
             idInterval: 'id has changed'
           }
@@ -624,7 +656,7 @@ describe('App.vue', () => {
 
       it('should call stopRefreshAuto', function () {
         // given
-        let data = {
+        const data = {
           data: {
             idInterval: 'id has changed'
           }
@@ -661,7 +693,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '88'
         })
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -685,7 +717,7 @@ describe('App.vue', () => {
         promiseCall.resolves({
           body: '0'
         })
-        let data = {
+        const data = {
           data: {
             numberOfAliveCells: '56'
           }
@@ -708,7 +740,7 @@ describe('App.vue', () => {
             body: myCells
           })
           promiseCall.rejects({})
-          let data = {
+          const data = {
             data: {
               numberOfAliveCells: '56'
             }
@@ -729,7 +761,7 @@ describe('App.vue', () => {
 
         it('should call stopRefreshAuto', function () {
           // given
-          let data = {
+          const data = {
             data: {
               idInterval: 'id has changed'
             }
@@ -749,8 +781,8 @@ describe('App.vue', () => {
   describe('refreshAutomatic', function () {
     it('should setInterval when id interval not setted', function () {
       // given
-      let mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
-      let data = {
+      const mySpy = sinon.spy(eventManager, 'setIntervalRefresh')
+      const data = {
         data: {
           idInterval: 'Refresh Auto Not Started'
         }
@@ -769,7 +801,7 @@ describe('App.vue', () => {
 
     it('should NOT setInterval and call refresh when AutoRefresh already started', function () {
       // given
-      let data = {
+      const data = {
         data: {
           idInterval: 'id has changed'
         }
@@ -787,7 +819,7 @@ describe('App.vue', () => {
   describe('stopRefreshAutomatic', function () {
     it('should call event manager', function () {
       // given
-      let mySpy = sinon.spy(eventManager, 'stopCallingRefreshAuto')
+      const mySpy = sinon.spy(eventManager, 'stopCallingRefreshAuto')
       vm = constructAppWithProps(App)
 
       // when
@@ -799,7 +831,7 @@ describe('App.vue', () => {
 
     it('should reset id interval', function () {
       // given
-      let data = {
+      const data = {
         data: {
           idInterval: 'id has changed'
         }
@@ -817,7 +849,7 @@ describe('App.vue', () => {
   describe('updateNewHeight', function () {
     it('should replace newHeight by value', function () {
       // given
-      let value = 17432
+      const value = 17432
 
       // when
       vm.updateNewHeight(value)
@@ -830,7 +862,7 @@ describe('App.vue', () => {
   describe('updateNewWidth', function () {
     it('should replace newWidth by value', function () {
       // given
-      let value = 17432
+      const value = 17432
 
       // when
       vm.updateNewWidth(value)
